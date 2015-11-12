@@ -18,7 +18,12 @@ var config = _.merge({
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin(),
+    new webpack.ProvidePlugin({
+      $:      "jquery",
+      jQuery: "jquery"
+    }),
     new BowerWebpackPlugin({
+      excludes: /.*\.less/,
       searchResolveModulesDirectories: false
     })
   ]

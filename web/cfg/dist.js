@@ -17,7 +17,12 @@ var config = _.merge({
       'process.env.NODE_ENV': '"production"'
     }),
     new BowerWebpackPlugin({
+      excludes: /.*\.less/,
       searchResolveModulesDirectories: false
+    }),
+    new webpack.ProvidePlugin({
+      $:      "jquery",
+      jQuery: "jquery"
     }),
     new webpack.optimize.UglifyJsPlugin(),
     new webpack.optimize.OccurenceOrderPlugin(),

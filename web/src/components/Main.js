@@ -1,19 +1,36 @@
 require('normalize.css');
 require('styles/App.css');
+require('bootstrap/dist/css/bootstrap.css');
+require('font-awesome/css/font-awesome.css');
+require('styles/sb-admin-2.css')
+require('styles/timeline.css')
 
-window.$ = window.jQuery = require('jquery');
-require('bootstrap');
+require("jquery");
+require("bootstrap");
+require('metismenu');
 
 import React from 'react';
 
 let yeomanImage = require('../images/yeoman.png');
+let HeaderBar = require('./HeaderBarComponent');
 
 class AppComponent extends React.Component {
   render() {
     return (
-      <div className="index">
-        <img src={yeomanImage} alt="Yeoman Generator" />
-        <div className="notice">Please edit <code>src/components/Main.js</code> to get started!</div>
+      <div id="wrapper">
+
+        <HeaderBar />
+
+        <div id="page-wrapper">
+            <div className="container-fluid">
+                <div className="row">
+                    <div className="col-lg-12">
+                        <h1 className="page-header">Blank</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+
       </div>
     );
   }

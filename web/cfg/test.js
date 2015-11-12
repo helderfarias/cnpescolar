@@ -44,6 +44,7 @@ module.exports = {
   },
   plugins: [
     new BowerWebpackPlugin({
+      excludes: /.*\.less/,
       searchResolveModulesDirectories: false
     })
   ]
