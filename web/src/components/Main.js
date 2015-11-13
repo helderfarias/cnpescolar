@@ -1,10 +1,11 @@
+'use strict';
+
 require('normalize.css');
 require('styles/App.css');
 require('bootstrap/dist/css/bootstrap.css');
 require('font-awesome/css/font-awesome.css');
 require('styles/sb-admin-2.css')
 require('styles/timeline.css')
-
 require("jquery");
 require("bootstrap");
 require('metismenu');
@@ -23,11 +24,7 @@ class AppComponent extends React.Component {
 
         <div id="page-wrapper">
             <div className="container-fluid">
-                <div className="row">
-                    <div className="col-lg-12">
-                        <h1 className="page-header">Blank</h1>
-                    </div>
-                </div>
+                {this.props.children}
             </div>
         </div>
 
@@ -35,7 +32,5 @@ class AppComponent extends React.Component {
     );
   }
 }
-
-AppComponent.defaultProps = {};
 
 export default AppComponent;
