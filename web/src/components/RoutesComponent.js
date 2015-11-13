@@ -5,6 +5,7 @@ import { Router, Route, Link, History } from 'react-router';
 import { createHistory, useBasename } from 'history';
 
 import Dashboard from './DashboardComponent'
+import Disciplina from './DisciplinaComponent'
 import Login from './LoginComponent'
 import App from './Main';
 
@@ -17,6 +18,8 @@ const AppRoutes = (
         <Route path="/" component={App}>
             <Route path="dashboard" component={Dashboard}/>
             <Route path="login" component={Login}/>
+            <Route path="disciplina" component={Disciplina}/>
+            <Route path="disciplina/novo" component={Disciplina}/>
         </Route>
     </Router>
 );

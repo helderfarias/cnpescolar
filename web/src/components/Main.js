@@ -11,9 +11,7 @@ require("bootstrap");
 require('metismenu');
 
 import React from 'react';
-
-let yeomanImage = require('../images/yeoman.png');
-let HeaderBar = require('./HeaderBarComponent');
+import HeaderBar from './HeaderBarComponent';
 
 class AppComponent extends React.Component {
   render() {

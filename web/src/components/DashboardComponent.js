@@ -11,7 +11,7 @@ class DashboardComponent extends React.Component {
                     <h1 className="page-header">Dashboard</h1>
                 </div>
 
-                <div className="col-lg-6">
+                <div className="col-lg-12">
                     <div className="panel panel-default">
                         <div className="panel-heading">
                             Basic Table

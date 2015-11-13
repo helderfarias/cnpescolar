@@ -33,7 +33,7 @@ class LeftMenuBarComponent extends React.Component {
             element.addClass('active');
         }
 
-        $('#side-menu').metisMenu();        
+        $('#side-menu').metisMenu();
     }
 
     render() {
@@ -57,8 +57,9 @@ class LeftMenuBarComponent extends React.Component {
                         <Link to="/dashboard"><i className="fa fa-dashboard fa-fw"></i> Dashboard</Link>
                     </li>
                     <li>
-                        <a href="#"><i className="fa fa-edit fa-fw"></i> Cadastro <span className="fa arrow"></span></a>
+                        <a href="#"><i className="fa fa-edit fa-fw"></i> Cadastros <span className="fa arrow"></span></a>
                         <ul className="nav nav-second-level">
+                            <li><Link to="/disciplina">Disciplina</Link></li>
                             <li><Link to="/login">Login</Link></li>
                         </ul>
                     </li>
