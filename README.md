@@ -1,41 +1,21 @@
 # cnpescolar
 
-## Setup
-```bash
-npm install -g yo
-npm install -g generator-react-webpack
-```
-
-## Usage
-The following commands are available in your project:
-```bash
-# Start for development
-npm start # or
-npm run serve
-
-# Start the dev-server with the dist version
-npm run serve:dist
-
-# Just build the dist version and copy static files
-npm run dist
-
-# Run unit tests
-npm test
-
-# Lint all files in src (also automatically done AFTER tests are run)
-npm run lint
-
-# Clean up the dist directory
-npm run clean
-
-# Just copy the static assets
-npm run copy
-
-# Generating new components
-yo react-webpack:component HeaderBar
-```
-
 ## Library
 ```bash
+http://blogs.atlassian.com/2014/08/flux-architecture-step-by-step/
+http://survivejs.com/webpack_react/react_and_flux/
+https://github.com/facebook/flux/tree/master/examples/flux-chat
+http://tableless.com.br/flux-entenda-como-funciona-arquitetura-flux-com-react/
+https://scotch.io/tutorials/getting-to-know-flux-the-react-js-architecture
 https://github.com/newtriks/generator-react-webpack
+https://scotch.io/tutorials/getting-to-know-flux-the-react-js-architecture
+```
+
+## Templates
+```bash
+https://github.com/eggheadio/egghead-react-flux-example
+http://tonyspiro.com/building-a-simple-react-application-using-the-flux-pattern/
+http://jmfurlott.com/tutorial-setting-up-a-single-page-react-web-app-with-react-router-and-webpack/
+https://blog.risingstack.com/using-react-with-webpack-tutorial/
+http://jmfurlott.com/tutorial-setting-up-a-single-page-react-web-app-with-react-router-and-webpack/
 ```

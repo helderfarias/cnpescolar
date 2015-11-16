@@ -1,0 +1,24 @@
+{
+  "name": "egghead-flux-example",
+  "version": "1.0.0",
+  "description": "",
+  "main": "gulpfile.js",
+  "dependencies": {
+    "browserify": "^10.2.6",
+    "envify": "^3.4.0",
+    "flux": "^2.1.1",
+    "gulp": "^3.9.0",
+    "react": "^0.14.0",
+    "react-async": "^2.1.0",
+    "react-dom": "^0.14.0",
+    "react-router-component": "^0.27.0",
+    "reactify": "^1.1.1",
+    "vinyl-source-stream": "^1.1.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
