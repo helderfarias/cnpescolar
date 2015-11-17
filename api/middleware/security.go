@@ -48,8 +48,13 @@ func createConfig(opt Opcoes) *config {
     return &config{opt: opt}
 }
 
-func SecurityRest(opt Opcoes) gin.HandlerFunc {
-    seg := createConfig(opt)
+func SecurityRest() gin.HandlerFunc {
+    seg := createConfig(Opcoes {
+        FrameDeny: true,
+        ContentTypeNosniff: true,
+        BrowserXssFilter: true,
+        ContentSecurityPolicy: "default-src 'self'",
+    })
 
     return func(c *gin.Context) {
         err := seg.validarRequest(c)
@@ -69,7 +74,7 @@ func defaultBadHostHandler(w http.ResponseWriter, r *http.Request) {
     http.Error(w, "Bad Host", http.StatusInternalServerError)
 }
 
-func (s *seguranca) validarRequest(c *gin.Context) error {
+func (s *config) validarRequest(c *gin.Context) error {
     w := c.Writer
     r := c.Request
 

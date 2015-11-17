@@ -32,12 +32,12 @@ func main() {
 	router.Use(middleware.SecurityRest())
 
 	logger.Info("Registrando endpoints")
-	endpoint.PingRegister(router)
+	endpoint.RegisterEndpoints(router)
 	router.Run(":4000")
 }
 
 func carregarConfiguracoes() *util.ResourceConfig {
-	config := env.GetOpt("CONFIG_FILE", "application.yml")
+	config := util.GetOpt("CONFIG_FILE", "application.yml")
 
 	data, err := ioutil.ReadFile(config)
 	if err != nil {

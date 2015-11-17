@@ -10,7 +10,7 @@ var DisciplinaAction = require('../../actions/disciplinaaction');
 
 function getStates() {
     return {
-        disicplinas: DisciplinaStore.obterTodas()
+        disicplinas: DisciplinaStore.getDisciplinas()
     };
 }
 
@@ -22,6 +22,7 @@ var Disciplinas = React.createClass({
 
     componentDidMount: function() {
         DisciplinaStore.addChangeListener(this._onChange);
+        DisciplinaAction.filtrarPor({ nome: 'Helder' });
     },
 
     componentWillUnmount: function() {
@@ -38,9 +39,7 @@ var Disciplinas = React.createClass({
         };
 
         DisciplinaAction.filtrarPor({ nome: 'Helder' });
-
         ReactDOM.findDOMNode(this.refs.nome).value = null;
-
         this.refs.filtro.close();
     },
 

@@ -1,5 +1,17 @@
 # ges
 
+## Setup Development
+```bash
+# Atom Edit
+http://marcio.io/2015/07/supercharging-atom-editor-for-go-development/
+```
+
+## Api Ajax Client
+```bash
+https://github.com/visionmedia/superagent
+http://www.code-experience.com/async-requests-with-react-js-and-flux-revisited/
+```
+
 ## Library
 ```bash
 http://blogs.atlassian.com/2014/08/flux-architecture-step-by-step/

@@ -1,16 +1,17 @@
 package endpoint
 
-import (
-	"github.com/gin-gonic/gin"
-	"net/http"
-)
+import "net/http"
+import "github.com/gin-gonic/gin"
 
-func PingRegister(router *gin.Engine) {
-	grupo := router.Group(Contexto("v1"))
-
-	grupo.GET("/ping", ping)
+type PingResource struct {
 }
 
-func ping(c *gin.Context) {
+func (r *PingResource) register(router *gin.Engine) {
+	grupo := router.Group("/ges/v1/api")
+
+	grupo.GET("/ping", r.ping)
+}
+
+func (r *PingResource) ping(c *gin.Context) {
 	c.String(http.StatusOK, "pong")
 }

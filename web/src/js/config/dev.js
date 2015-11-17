@@ -1,7 +1,7 @@
 'use strict';
 
 const config = {
-  appEnv: 'dev'  // feel free to remove the appEnv property here
+  appEnv: 'dev'
 };
 
 export default config;

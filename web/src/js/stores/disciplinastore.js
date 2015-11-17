@@ -2,17 +2,31 @@
 
 var AppDispatcher = require('../dispatcher/appdispatcher');
 var EventEmitter = require('events').EventEmitter;
-var AppConstants = require('../constants/appconstants');
+var AppConsts = require('../constants/appconstants');
+var ApiConfig = require('../constants/apiconstants');
 var assign = require('object-assign');
+var request = require('superagent');
 
 var _store = {
-    disicplinas: []
+    disciplinas: []
 };
+
+function consultarDisciplinas(callback) {
+    request.get(ApiConfig.url + "/disciplinas")
+           .end(function(err, res) {
+               if (err != null) {
+                   return callback(err);
+               }
+
+               _store.disciplinas = res.body;
+               callback(err);
+            });
+}
 
 var DisciplinaStore = assign({}, EventEmitter.prototype, {
 
-    obterTodas: function() {
-        return _store.disicplinas;
+    getDisciplinas: function() {
+        return _store.disciplinas;
     },
 
     emitChange: function() {
@@ -30,9 +44,10 @@ var DisciplinaStore = assign({}, EventEmitter.prototype, {
 
 AppDispatcher.register(function(action) {
     switch (action.actionType) {
-        case AppConstants.LISTAR_DISCIPLINAS:
-            _store.disicplinas.push({ id: 1, nome: 'Helder' });
-            DisciplinaStore.emitChange();
+        case AppConsts.LISTAR_DISCIPLINAS:
+            consultarDisciplinas(function(err) {
+                DisciplinaStore.emitChange();
+            });
             break;
 
         default:
