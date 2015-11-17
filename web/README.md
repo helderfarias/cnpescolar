@@ -1,15 +1,7 @@
-# cnpescolar - web
-
-## Setup
-```bash
-npm install -g yo
-npm install -g generator-react-webpack
-```
+# ges - web
 
 ## Usage
-The following commands are available in your project:
 ```bash
-# Start for development
 npm start # or
 npm run serve
 
@@ -30,9 +22,6 @@ npm run clean
 
 # Just copy the static assets
 npm run copy
-
-# Generating new components
-yo react-webpack:component HeaderBar
 ```
 
 ## Library

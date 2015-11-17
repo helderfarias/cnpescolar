@@ -1,6 +1,6 @@
 database:
    dialect: postgres
-   datasource: user=easymobile password=easymobile00 dbname=easymobile host=localhost port=5432 sslmode=disable
+   datasource: user=ges password=ges00 dbname=ges host=localhost port=5432 sslmode=disable
    showsql: true
    pool:
       min: 1

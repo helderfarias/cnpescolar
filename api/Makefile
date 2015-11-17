@@ -1,7 +1,7 @@
 default: build
 
 build:
-	@docker build -t easymobile_api$(tag) .
+	@docker build -t ges_api$(tag) .
 
 test:
 	@go test ./...

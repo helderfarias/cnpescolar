@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/helderfarias/cnpescolar/api/endpoint"
-	"github.com/helderfarias/cnpescolar/api/logger"
-	"github.com/helderfarias/cnpescolar/api/util"
-	"github.com/helderfarias/cnpescolar/api/middleware"
+	"github.com/helderfarias/ges/api/endpoint"
+	"github.com/helderfarias/ges/api/logger"
+	"github.com/helderfarias/ges/api/util"
+	"github.com/helderfarias/ges/api/middleware"
 	"github.com/gin-gonic/gin"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
