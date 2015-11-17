@@ -3,10 +3,10 @@ var AppConstants = require('../constants/appconstants');
 
 var DisciplinaAction = {
 
-    getAll: function(text) {
+    filtrarPor: function(filtro) {
         AppDispatcher.dispatch({
             actionType: AppConstants.LISTAR_DISCIPLINAS,
-            text: text
+            filtro: filtro
         });
     }
 

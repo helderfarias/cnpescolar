@@ -4,33 +4,34 @@ var AppDispatcher = require('../dispatcher/appdispatcher');
 var EventEmitter = require('events').EventEmitter;
 var AppConstants = require('../constants/appconstants');
 var assign = require('object-assign');
-var CHANGE_EVENT = 'change';
 
-var _disciplinas = [];
+var _store = {
+    disicplinas: []
+};
 
 var DisciplinaStore = assign({}, EventEmitter.prototype, {
 
-  getAll: function() {
-    return _disciplinas;
-  },
+    obterTodas: function() {
+        return _store.disicplinas;
+    },
 
-  emitChange: function() {
-    this.emit(CHANGE_EVENT);
-  },
+    emitChange: function() {
+        this.emit('change');
+    },
 
-  addChangeListener: function(callback) {
-    this.on(CHANGE_EVENT, callback);
-  },
+    addChangeListener: function(callback) {
+        this.on('change', callback);
+    },
 
-  removeChangeListener: function(callback) {
-    this.removeListener(CHANGE_EVENT, callback);
-  }
+    removeChangeListener: function(callback) {
+        this.removeListener('change', callback);
+    }
 });
 
 AppDispatcher.register(function(action) {
     switch (action.actionType) {
         case AppConstants.LISTAR_DISCIPLINAS:
-            _disciplinas.push({'nome': 'Helder'});
+            _store.disicplinas.push({ id: 1, nome: 'Helder' });
             DisciplinaStore.emitChange();
             break;
 

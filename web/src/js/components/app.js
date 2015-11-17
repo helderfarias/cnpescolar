@@ -25,7 +25,7 @@ var App = React.createClass({
                             <span className="icon-bar"></span>
                             <span className="icon-bar"></span>
                         </button>
-                        <a className="navbar-brand" href="index.html">SB Admin v2.0</a>
+                        <a className="navbar-brand" href="index.html">Boostrap Admin</a>
                     </div>
 
                     <ul className="nav navbar-top-links navbar-right">
@@ -34,7 +34,7 @@ var App = React.createClass({
                                 <i className="fa fa-user fa-fw"></i>  <i className="fa fa-caret-down"></i>
                             </a>
                             <ul className="dropdown-menu dropdown-user">
-                                <li><a href="login.html"><i className="fa fa-sign-out fa-fw"></i> Logout</a></li>
+                                <li><a href="login.html"><i className="fa fa-sign-out fa-fw"></i> Sair</a></li>
                             </ul>
                         </li>
                     </ul>

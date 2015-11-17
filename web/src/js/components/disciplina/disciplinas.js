@@ -2,20 +2,22 @@
 
 var React = require('react');
 var Link = require('react-router').Link;
+var ReactDOM = require('react-dom');
+
 var Modal = require('../modal');
 var DisciplinaStore = require('../../stores/disciplinastore');
 var DisciplinaAction = require('../../actions/disciplinaaction');
 
-function getDisciplinaState() {
+function getStates() {
     return {
-        disicplinas: DisciplinaStore.getAll()
+        disicplinas: DisciplinaStore.obterTodas()
     };
 }
 
 var Disciplinas = React.createClass({
 
     getInitialState: function() {
-        return getDisciplinaState();
+        return getStates();
     },
 
     componentDidMount: function() {
@@ -31,17 +33,30 @@ var Disciplinas = React.createClass({
     },
 
     onFilter: function() {
-        DisciplinaAction.getAll("text");
+        var filtro = {
+            nome: ReactDOM.findDOMNode(this.refs.nome).value.trim()
+        };
+
+        DisciplinaAction.filtrarPor({ nome: 'Helder' });
+
+        ReactDOM.findDOMNode(this.refs.nome).value = null;
+
         this.refs.filtro.close();
     },
 
+    _onChange: function() {
+        this.setState(getStates());
+    },
+
     render: function() {
-        console.log(DisciplinaStore.getAll());
+        var rows = this.state.disicplinas.map(function(item, index) {
+            return (<tr key={index}><td>{item.id}</td><td>{item.nome}</td></tr>);
+        });
 
         return (
             <div className="row">
                 <div className="col-lg-12">
-                    <h3 className="page-header">Disciplinas</h3>
+                    <h3 className="page-header">List</h3>
                 </div>
 
                 <div className="col-lg-12">
@@ -62,6 +77,7 @@ var Disciplinas = React.createClass({
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    {rows}
                                 </tbody>
                             </table>
                         </div>
@@ -80,10 +96,6 @@ var Disciplinas = React.createClass({
                 </Modal>
             </div>
         );
-    },
-
-    _onChange: function() {
-        this.setState(getDisciplinaState());
     }
 
 });
