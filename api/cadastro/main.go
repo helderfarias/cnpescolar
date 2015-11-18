@@ -1,16 +1,17 @@
 package main
 
 import (
-	"github.com/helderfarias/ges/api/endpoint"
-	"github.com/helderfarias/ges/api/logger"
-	"github.com/helderfarias/ges/api/util"
-	"github.com/helderfarias/ges/api/middleware"
+	"io/ioutil"
+	"log"
+
 	"github.com/gin-gonic/gin"
+	"github.com/helderfarias/ges/api/cadastro/endpoint"
+	"github.com/helderfarias/ges/api/cadastro/logger"
+	"github.com/helderfarias/ges/api/cadastro/middleware"
+	"github.com/helderfarias/ges/api/cadastro/util"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 	"gopkg.in/yaml.v2"
-	"io/ioutil"
-	"log"
 )
 
 func main() {

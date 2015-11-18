@@ -1,0 +1,14 @@
+{
+  "name": "ges-seguranca-api",
+  "description": "ges-seguranca-api",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node server.js --env=dev"
+  },
+  "dependencies": {
+    "body-parser": "^1.14.1",
+    "express": "^4.13.3",
+    "morgan": "^1.6.1"
+  }
+}

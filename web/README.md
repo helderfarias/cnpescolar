@@ -1,6 +1,6 @@
 # ges - web
 
-## Usage
+## Uso
 ```bash
 npm start # or
 npm run serve
@@ -24,12 +24,21 @@ npm run clean
 npm run copy
 ```
 
-## Library
+## Dicas
+
 ```bash
-https://github.com/newtriks/generator-react-webpack
+# Criar label estático
+<code>
+    <div className="form-group">
+        <label className="control-label col-sm-2">Email </label>
+        <div className="col-sm-10">
+            <p className="form-control-static">someone@example.com</p>
+        </div>
+    </div>
+</code>
 ```
 
-# References
+# Referências
 ```bash
 http://www.w3schools.com/bootstrap/default.asp
 http://engineering.devmag.io/post/1/creating-an-isomorphic-blogging-app-using-react-and-flux

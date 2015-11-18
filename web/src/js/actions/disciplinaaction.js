@@ -8,6 +8,13 @@ var DisciplinaAction = {
             actionType: AppConstants.LISTAR_DISCIPLINAS,
             filtro: filtro
         });
+    },
+
+    salvar: function(disciplina) {
+        AppDispatcher.dispatch({
+            actionType: AppConstants.SALVAR_DISCIPLINAS,
+            disciplina: disciplina
+        });
     }
 
 };

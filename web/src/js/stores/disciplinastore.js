@@ -3,7 +3,7 @@
 var AppDispatcher = require('../dispatcher/appdispatcher');
 var EventEmitter = require('events').EventEmitter;
 var AppConsts = require('../constants/appconstants');
-var ApiConfig = require('../constants/apiconstants');
+var ApiConfig = require('../constants/apiconfig');
 var assign = require('object-assign');
 var request = require('superagent');
 
@@ -11,7 +11,7 @@ var _store = {
     disciplinas: []
 };
 
-function consultarDisciplinas(callback) {
+function consultar(callback) {
     request.get(ApiConfig.url + "/disciplinas")
            .end(function(err, res) {
                if (err != null) {
@@ -21,6 +21,15 @@ function consultarDisciplinas(callback) {
                _store.disciplinas = res.body;
                callback(err);
             });
+}
+
+function cadastrar(entity, callback) {
+    request.post(ApiConfig.url + "/disciplinas")
+           .send(entity)
+           .set('Accept', 'application/json')
+           .end(function(err, res){
+               callback(err);
+           });
 }
 
 var DisciplinaStore = assign({}, EventEmitter.prototype, {
@@ -45,12 +54,20 @@ var DisciplinaStore = assign({}, EventEmitter.prototype, {
 AppDispatcher.register(function(action) {
     switch (action.actionType) {
         case AppConsts.LISTAR_DISCIPLINAS:
-            consultarDisciplinas(function(err) {
+            consultar(function(err) {
+                DisciplinaStore.emitChange();
+            });
+            break;
+
+        case AppConsts.SALVAR_DISCIPLINAS:
+            cadastrar(action.disciplina, function(err) {
+                console.log(err);
                 DisciplinaStore.emitChange();
             });
             break;
 
         default:
+            return true;
     }
 });
 
