@@ -11,24 +11,24 @@ var _store = {
     disciplinas: []
 };
 
-function consultar(callback) {
-    request.get(ApiConfig.url + "/disciplinas")
+function consultar(cb) {
+    request.get(ApiConfig.cadastro.api('/disciplinas'))
            .end(function(err, res) {
                if (err != null) {
-                   return callback(err);
+                   return cb(err);
                }
 
                _store.disciplinas = res.body;
-               callback(err);
+               cb(err);
             });
 }
 
-function cadastrar(entity, callback) {
-    request.post(ApiConfig.url + "/disciplinas")
+function cadastrar(entity, cb) {
+    request.post(ApiConfig.cadastro.api('/disciplinas'))
            .send(entity)
            .set('Accept', 'application/json')
            .end(function(err, res){
-               callback(err);
+               cb(err);
            });
 }
 
@@ -42,12 +42,12 @@ var DisciplinaStore = assign({}, EventEmitter.prototype, {
         this.emit('change');
     },
 
-    addChangeListener: function(callback) {
-        this.on('change', callback);
+    addChangeListener: function(cb) {
+        this.on('change', cb);
     },
 
-    removeChangeListener: function(callback) {
-        this.removeListener('change', callback);
+    removeChangeListener: function(cb) {
+        this.removeListener('change', cb);
     }
 });
 
@@ -61,7 +61,6 @@ AppDispatcher.register(function(action) {
 
         case AppConsts.SALVAR_DISCIPLINAS:
             cadastrar(action.disciplina, function(err) {
-                console.log(err);
                 DisciplinaStore.emitChange();
             });
             break;

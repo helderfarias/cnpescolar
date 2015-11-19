@@ -34,7 +34,7 @@ var App = React.createClass({
                                 <i className="fa fa-user fa-fw"></i>  <i className="fa fa-caret-down"></i>
                             </a>
                             <ul className="dropdown-menu dropdown-user">
-                                <li><a href="login.html"><i className="fa fa-sign-out fa-fw"></i> Sair</a></li>
+                                <li><a href="#"><i className="fa fa-sign-out fa-fw"></i> Sair</a></li>
                             </ul>
                         </li>
                     </ul>
