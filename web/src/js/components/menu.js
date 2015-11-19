@@ -28,7 +28,7 @@ var Menu = React.createClass({
         };
 
         $('#menu ul li a').show();
-        
+
         var pesquisa = ReactDOM.findDOMNode(this.refs.search).value.trim();
 
         $.expr[':'].Contains = function(obj, index, meta, stack){
@@ -45,27 +45,27 @@ var Menu = React.createClass({
     render: function() {
         return (
             <div className="navbar-default sidebar" role="navigation">
-              <div id="menu" className="sidebar-nav navbar-collapse">
-                  <ul className="nav" id="side-menu">
-                      <li className="sidebar-search">
-                          <div className="input-group custom-search-form">
-                              <input type="text" className="form-control" ref="search" id="search" placeholder="Procurar..."/>
-                              <span className="input-group-btn">
-                                  <button className="btn btn-default" type="button" onClick={this.filtrarItensMenu}>
-                                      <i className="fa fa-search"></i>
-                                  </button>
-                              </span>
-                          </div>
-                      </li>
+                <div id="menu" className="sidebar-nav navbar-collapse">
+                    <ul className="nav" id="side-menu">
+                        <li className="sidebar-search">
+                            <div className="input-group custom-search-form">
+                                <input type="text" className="form-control" ref="search" id="search" placeholder="Procurar..." autofocus={true} />
+                                <span className="input-group-btn">
+                                    <button className="btn btn-default" type="button" onClick={this.filtrarItensMenu}>
+                                        <i className="fa fa-search"></i>
+                                    </button>
+                                </span>
+                            </div>
+                        </li>
 
-                      <li>
-                          <a href="#"><i className="fa fa-edit fa-fw"></i> Cadastros <span className="fa arrow"></span></a>
-                          <ul className="nav nav-second-level">
-                              <li><Link to="/disciplinas">Disciplina</Link></li>
-                          </ul>
-                      </li>
-                  </ul>
-              </div>
+                        <li>
+                            <a href="#"><i className="fa fa-edit fa-fw"></i> Cadastros <span className="fa arrow"></span></a>
+                            <ul className="nav nav-second-level">
+                                <li><Link to="/disciplinas">Disciplina</Link></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
             </div>
         );
     },
