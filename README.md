@@ -4,6 +4,10 @@
 ```bash
 # Atom Edit
 http://marcio.io/2015/07/supercharging-atom-editor-for-go-development/
+
+# React Seed
+https://github.com/auth0/react-flux-jwt-authentication-sample
+https://auth0.com/blog/2015/04/09/adding-authentication-to-your-react-flux-app/
 ```
 
 ## Api Ajax Client
