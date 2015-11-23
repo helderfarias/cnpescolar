@@ -1,12 +1,8 @@
 'use strict';
 
-var createHistory = require('history/lib/createBrowserHistory');
+import { createHistory } from 'history';
 
-var NavigatorHandler = {
-
-    history: function() {
-        return createHistory();
-    },
+let NavigatorHandler = {
 
     goTo: function(next) {
          return createHistory().replaceState(null, next);
@@ -14,4 +10,4 @@ var NavigatorHandler = {
 
 };
 
-module.exports = NavigatorHandler;
+export default NavigatorHandler;

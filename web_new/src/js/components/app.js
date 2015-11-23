@@ -9,12 +9,12 @@ require("jquery");
 require("bootstrap");
 require('metismenu');
 
-var React = require('react');
-var Menu = require('./menu');
+import React from 'react';
+import Menu from './menu';
 
-var NavBar = React.createClass({
+let NavBar = React.createClass({
 
-    render: function() {
+    render() {
         const conteudo = (
             <nav className="navbar navbar-default navbar-static-top" role="navigation" style={{marginBottom: 0}}>
                 <div className="navbar-header">
@@ -47,9 +47,9 @@ var NavBar = React.createClass({
 
 });
 
-var App = React.createClass({
+let App = React.createClass({
 
-    render: function() {
+    render() {
         return (
             <div id="wrapper">
                 <NavBar rendered={true}/>
@@ -65,4 +65,4 @@ var App = React.createClass({
 
 });
 
-module.exports = App;
+export default App;

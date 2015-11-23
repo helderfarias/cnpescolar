@@ -1,16 +1,16 @@
 'use strict';
 
-var React = require('react');
-var ReactDOM = require('react-dom');
-var Link = require('react-router').Link;
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { Link } from 'react-router';
 
-var Menu = React.createClass({
+let Menu = React.createClass({
 
-    componentDidMount: function() {
+    componentDidMount() {
         this._resizeWindow();
     },
 
-    filtrarItensMenu: function() {
+    filtrarItensMenu() {
         var accentFold = function(text) {
             return text.replace(/([àáâãäå])|([ç])|([èéêë])|([ìíîï])|([ñ])|([òóôõöø])|([ß])|([ùúûü])|([ÿ])|([æ])/g,
                                 function(str,a,c,e,i,n,o,s,u,y,ae) {
@@ -42,7 +42,7 @@ var Menu = React.createClass({
         }
     },
 
-    render: function() {
+    render() {
         return (
             <div className="navbar-default sidebar" role="navigation">
                 <div id="menu" className="sidebar-nav navbar-collapse">
@@ -70,7 +70,7 @@ var Menu = React.createClass({
         );
     },
 
-    _resizeWindow: function() {
+    _resizeWindow() {
         $(window).bind("load resize", function() {
             let topOffset = 50;
             let width = (this.window.innerWidth > 0) ? this.window.innerWidth : this.screen.width;
@@ -103,4 +103,4 @@ var Menu = React.createClass({
 
 });
 
-module.exports = Menu;
+export default Menu;

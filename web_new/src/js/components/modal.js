@@ -1,25 +1,25 @@
 'use strict';
 
-var React = require('react');
-var ReactDOM = require('react-dom');
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-var Modal = React.createClass({
+let Modal = React.createClass({
 
-    ok: function(e) {
+    ok(e) {
         if (this.props.onFilter) {
             this.props.onFilter();
         }
     },
 
-    open: function() {
+    open() {
         $(ReactDOM.findDOMNode(this.refs.modal)).modal("show");
     },
 
-    close: function() {
+    close() {
         $(ReactDOM.findDOMNode(this.refs.modal)).modal("hide");
     },
 
-    render: function() {
+    render() {
         return (
             <div className="modal fade" id="modal" ref="modal" role="dialog">
                 <div className="modal-dialog">
@@ -45,4 +45,4 @@ var Modal = React.createClass({
 
 });
 
-module.exports = Modal;
+default export Modal;

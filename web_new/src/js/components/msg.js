@@ -1,8 +1,8 @@
 'use strict';
 
-var React = require('react');
+import React from 'react';
 
-var AlertMessage = React.createClass({
+let AlertMessage = React.createClass({
 
     propTypes: {
        onClose: React.PropTypes.func,
@@ -17,7 +17,7 @@ var AlertMessage = React.createClass({
         };
     },
 
-    render: function() {
+    render() {
         if (this.props.severity != 'danger' &&
             this.props.severity != 'info'   &&
             this.props.severity != 'warning') {
@@ -40,4 +40,4 @@ var AlertMessage = React.createClass({
 
 });
 
-module.exports = AlertMessage;
+export default AlertMessage;
