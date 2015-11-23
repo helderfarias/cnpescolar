@@ -14,9 +14,9 @@ let _store = {
 
 function realizarLogin(credencias, cb) {
     request.post(Config.seguranca.auth('/token'))
-           .send(credencias)
+           .send({ username: credencias.login, password: credencias.senha })
            .set('Accept', 'application/json')
-           .set('Authorization', 'Basic 1' )
+           .set('Authorization', 'Basic Y2xpZW50aWQ6Y2xpZW50aWQwMA==')
            .end(function(err, res){
                cb(err, res);
            });
@@ -49,11 +49,15 @@ Dispatcher.register(function(action) {
     switch (action.actionType) {
         case Eventos.LOGIN:
             realizarLogin(action.credencias, function(err, res) {
-                alert("There's an error logging in");
-                console.log("Error logging in", err);
-            });
+                if (err) {
+                    alert("There's an error logging in");
+                    console.log("Error logging in", err);
+                    return;
+                }
 
-            LoginStore.emitChange();
+                localStorage.setItem('gestoken', res.text);
+                LoginStore.emitChange();
+            });
             break;
 
         default:
