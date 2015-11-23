@@ -1,10 +1,7 @@
 var path = require('path');
 var webpack = require('webpack');
 var _ = require('lodash');
-
 var baseConfig = require('./base');
-
-// Add needed plugins here
 var BowerWebpackPlugin = require('bower-webpack-plugin');
 
 var config = _.merge({
@@ -29,7 +26,6 @@ var config = _.merge({
   ]
 }, baseConfig);
 
-// Add needed loaders
 config.module.loaders.push({
   test: /\.(js|jsx)$/,
   loader: 'react-hot!babel-loader',

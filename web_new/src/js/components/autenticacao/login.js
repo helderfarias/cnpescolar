@@ -3,25 +3,44 @@
 import React from 'react';
 import AlertMessage from '../msg';
 import { History } from 'react-router';
+import LoginAction from '../../actions/login_action';
+import LoginStore from '../../stores/login_store';
 
 let Login = React.createClass({
     mixins: [ History ],
 
     getInitialState() {
         return {
-            error: false
+            error: false,
+            token: LoginStore.getToken()
         }
+    },
+
+    componentDidMount() {
+        LoginStore.addChangeListener(this._onChange);
+    },
+
+    componentWillUnmount() {
+        LoginStore.removeChangeListener(this._onChange);
     },
 
     handleSubmit(e) {
         e.preventDefault();
 
-        const { location } = this.props;
-        localStorage.setItem('ges_token', 'token');
-        this.history.replaceState(null, '/');
+        LoginAction.login(this.refs.login.value, this.refs.senha.value);
     },
 
-    _handleAlertClose() {
+    _onChange() {
+        if (LoginStore.isLoggedIn()) {
+            this.history.replaceState(null, '/');
+            this.setState({ error: false });
+            return
+        }
+
+        this.setState({ error: true });
+    },
+
+    _onAlertClose() {
         this.setState({ error: false });
     },
 
@@ -35,17 +54,17 @@ let Login = React.createClass({
                         </div>
 
                         <div className="panel-body">
-                            <AlertMessage rendered={this.state.error} severity="danger" onClose={this._handleAlertClose}>
+                            <AlertMessage rendered={this.state.error} severity="danger" onClose={this._onAlertClose}>
                                 <p>Credências inválida</p>
                             </AlertMessage>
 
                             <form role="form" onSubmit={this.handleSubmit}>
                                 <fieldset>
                                     <div className={this.state.error ? "form-group has-error" : "form-group"}>
-                                        <input className="form-control" placeholder="E-mail" ref="username" name="username" type="text" autofocus/>
+                                        <input className="form-control" placeholder="Login" ref="login" name="login" type="text" autofocus/>
                                     </div>
                                     <div className={this.state.error ? "form-group has-error" : "form-group"}>
-                                        <input className="form-control" placeholder="Senha" ref="password" name="password" type="password"/>
+                                        <input className="form-control" placeholder="Senha" ref="senha" name="senha" type="password"/>
                                     </div>
                                     <button type="submit" className="btn btn-lg btn-success btn-block">Entrar</button>
                                 </fieldset>

@@ -23,7 +23,7 @@ module.exports = {
   resolve: {
     extensions: ['', '.js', '.jsx'],
     alias: {
-      styles: srcPath + '/css/',        
+      styles: srcPath + '/css/',
       actions: srcPath + '/actions/',
       components: srcPath + '/components/',
       sources: srcPath + '/sources/',

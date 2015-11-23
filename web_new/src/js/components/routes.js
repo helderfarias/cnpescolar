@@ -5,7 +5,7 @@ import { createHistory, useBasename } from 'history';
 import App from './app';
 import NavigatorHandler from './nav';
 import Home from './home';
-import AutenticacaoAction from '../actions/autenticacao_action';
+import LoginStore from '../stores/login_store';
 import Login from './autenticacao/login';
 import DisciplinaListagem from './disciplina/listar';
 import DisciplinaNovo from './disciplina/criar';
@@ -15,7 +15,7 @@ const history = useBasename(createHistory)({
 });
 
 function flowAuth(nextState, replaceState) {
-    if (nextState.location.pathname != '/login' && !AutenticacaoAction.loggedIn()) {
+    if (nextState.location.pathname != '/login' && !LoginStore.isLoggedIn()) {
         replaceState({ nextPathname: nextState.location.pathname }, '/login');
     }
 }
