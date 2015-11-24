@@ -54,7 +54,7 @@ let DisciplinaNovo = React.createClass({
                 </div>
 
                 <div className="row">
-                    <AlertMessage source={this.state.erros} severity="danger" onClose={this.onAlertClose}/>
+                    <AlertMessage source={this.state.erros} severity='danger' onClose={this.onAlertClose}/>
 
                    <div className="col-lg-12">
                        <div className="panel panel-default">

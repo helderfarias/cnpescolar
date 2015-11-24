@@ -7,6 +7,7 @@ import DisciplinaAction from '../../actions/disciplina_action';
 import DisciplinaStore from '../../stores/disciplina_store';
 
 let DisciplinaListagem = React.createClass({
+    mixins: [ History ],
 
     getInitialState() {
         return {
@@ -32,7 +33,7 @@ let DisciplinaListagem = React.createClass({
             nome: this.refs.nome.value.trim()
         };
 
-        DisciplinaAction.filtrarPor({ nome: 'Helder' });
+        DisciplinaAction.filtrarPor(filtro);
         this.refs.nome.value = null;
         this.refs.filtro.close();
     },

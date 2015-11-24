@@ -29,7 +29,7 @@ let AlertMessage = React.createClass({
 
     render() {
         if (this.isNotValidSeverity()) {
-            throw Error("A propriedade [severity] deve ser: danger, info ou warning");
+            throw Error('A propriedade [severity] deve ser: danger, info ou warning');
         }
 
         if (this.isEmpty()) {

@@ -53,14 +53,14 @@ let Login = React.createClass({
                         </div>
 
                         <div className="panel-body">
-                            <AlertMessage source={this.state.erros} severity="danger" onClose={this.onAlertClose}/>
+                            <AlertMessage source={this.state.erros} severity='danger' onClose={this.onAlertClose}/>
 
                             <form role="form" onSubmit={this.handleSubmit}>
                                 <fieldset>
-                                    <div className={this.state.error ? "form-group has-error" : "form-group"}>
+                                    <div className={this.state.error ? 'form-group has-error' : 'form-group'}>
                                         <input className="form-control" placeholder="Login" ref="login" name="login" type="text" autoFocus/>
                                     </div>
-                                    <div className={this.state.error ? "form-group has-error" : "form-group"}>
+                                    <div className={this.state.error ? 'form-group has-error' : 'form-group'}>
                                         <input className="form-control" placeholder="Senha" ref="senha" name="senha" type="password"/>
                                     </div>
                                     <button type="submit" className="btn btn-lg btn-success btn-block">Entrar</button>

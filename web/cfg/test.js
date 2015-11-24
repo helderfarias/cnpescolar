@@ -1,6 +1,7 @@
 var path = require('path');
 var srcPath = path.join(__dirname, '/../src/js/');
 var BowerWebpackPlugin = require('bower-webpack-plugin');
+var webpack = require('webpack');
 
 module.exports = {
   devtool: 'eval',
@@ -41,6 +42,10 @@ module.exports = {
     }
   },
   plugins: [
+    new webpack.ProvidePlugin({
+        $:      "jquery",
+        jQuery: "jquery"
+    }),
     new BowerWebpackPlugin({
       excludes: /.*\.less/,
       searchResolveModulesDirectories: false
