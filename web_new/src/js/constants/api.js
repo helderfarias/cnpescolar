@@ -1,7 +1,7 @@
 'use strict';
 
-var ApiConfig = {
-    seguranca: {
+let ApiConfig = {
+    Seguranca: {
         auth: function(resource) {
             return 'http://localhost:4001/ges/v1/auth' + resource;
         },
@@ -9,11 +9,13 @@ var ApiConfig = {
             return 'http://localhost:4001/ges/v1/api' + resource;
         }
     },
-    cadastro: {
+    Cadastro: {
         api: function(resource) {
             return 'http://localhost:4000/ges/v1/api' + resource;
         }
-    }
-}
+    },
+    ClientCredencials: { id: 'clientid', secret: 'clientid00' }
+};
 
-module.exports = ApiConfig;
+
+export default ApiConfig;

@@ -2,7 +2,15 @@
 
 let Eventos = {
 
-    LOGIN: 'REALIZAR_LOGIN'
+    Autenticacao: {
+        LOGIN: 'REALIZAR_LOGIN',
+        LOGOUT: 'REALIZAR_LOGOUT'
+    },
+
+    Disciplina: {
+        LISTAR: 'LISTAR_DISCIPLINAS',
+        SALVAR: 'SALVAR_DISCIPLINAS'
+    }
 
 };
 

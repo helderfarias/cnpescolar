@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react';
-import AlertMessage from '../msg';
+import AlertMessage from '../alert';
 import { History } from 'react-router';
 import LoginAction from '../../actions/login_action';
 import LoginStore from '../../stores/login_store';
@@ -33,7 +33,6 @@ let Login = React.createClass({
     _onChange() {
         if (LoginStore.isLoggedIn()) {
             this.history.replaceState(null, '/');
-            this.setState({ error: false });
             return
         }
 
@@ -61,7 +60,7 @@ let Login = React.createClass({
                             <form role="form" onSubmit={this.handleSubmit}>
                                 <fieldset>
                                     <div className={this.state.error ? "form-group has-error" : "form-group"}>
-                                        <input className="form-control" placeholder="Login" ref="login" name="login" type="text" autofocus/>
+                                        <input className="form-control" placeholder="Login" ref="login" name="login" type="text" autoFocus/>
                                     </div>
                                     <div className={this.state.error ? "form-group has-error" : "form-group"}>
                                         <input className="form-control" placeholder="Senha" ref="senha" name="senha" type="password"/>

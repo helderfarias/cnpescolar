@@ -1,34 +1,32 @@
 'use strict';
 
-var AppDispatcher = require('../dispatcher/appdispatcher');
-var EventEmitter = require('events').EventEmitter;
-var AppConsts = require('../constants/appconstants');
-var ApiConfig = require('../constants/apiconfig');
-var assign = require('object-assign');
-var request = require('superagent');
+import Dispatcher from '../dispatcher/appdispatcher';
+import Eventos from '../constants/eventos';
+import Config from '../constants/api';
+import { EventEmitter } from 'events';
+import request from 'superagent';
+import assign from 'object-assign';
 
 var _store = {
     disciplinas: []
 };
 
 function consultar(cb) {
-    request.get(ApiConfig.cadastro.api('/disciplinas'))
+    request.get(Config.Cadastro.api('/disciplinas'))
            .end(function(err, res) {
-               if (err != null) {
-                   return cb(err);
+               if (!err) {
+                   _store.disciplinas = res.body;
                }
-
-               _store.disciplinas = res.body;
-               cb(err);
+               cb();
             });
 }
 
 function cadastrar(entity, cb) {
-    request.post(ApiConfig.cadastro.api('/disciplinas'))
+    request.post(Config.Cadastro.api('/disciplinas'))
            .send(entity)
            .set('Accept', 'application/json')
            .end(function(err, res){
-               cb(err);
+               cb();
            });
 }
 
@@ -49,18 +47,19 @@ var DisciplinaStore = assign({}, EventEmitter.prototype, {
     removeChangeListener: function(cb) {
         this.removeListener('change', cb);
     }
+
 });
 
-AppDispatcher.register(function(action) {
+Dispatcher.register(function(action) {
     switch (action.actionType) {
-        case AppConsts.LISTAR_DISCIPLINAS:
-            consultar(function(err) {
+        case Eventos.Disciplina.LISTAR:
+            consultar(function() {
                 DisciplinaStore.emitChange();
             });
             break;
 
-        case AppConsts.SALVAR_DISCIPLINAS:
-            cadastrar(action.disciplina, function(err) {
+        case Eventos.Disciplina.SALVAR:
+            cadastrar(action.disciplina, function() {
                 DisciplinaStore.emitChange();
             });
             break;
@@ -70,4 +69,4 @@ AppDispatcher.register(function(action) {
     }
 });
 
-module.exports = DisciplinaStore;
+export default DisciplinaStore;

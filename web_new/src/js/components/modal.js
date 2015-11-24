@@ -45,4 +45,4 @@ let Modal = React.createClass({
 
 });
 
-default export Modal;
+export default Modal;

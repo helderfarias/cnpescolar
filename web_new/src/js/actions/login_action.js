@@ -7,8 +7,14 @@ let LoginAction = {
 
     login: function(login, senha) {
         Dispatcher.dispatch({
-            actionType: Eventos.LOGIN,
+            actionType: Eventos.Autenticacao.LOGIN,
             credencias: { login: login, senha: senha }
+        });
+    },
+
+    logout: function() {
+        Dispatcher.dispatch({
+            actionType: Eventos.Autenticacao.LOGOUT
         });
     }
 

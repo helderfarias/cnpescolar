@@ -11,7 +11,7 @@ let Menu = React.createClass({
     },
 
     filtrarItensMenu() {
-        var accentFold = function(text) {
+        let accentFold = function(text) {
             return text.replace(/([àáâãäå])|([ç])|([èéêë])|([ìíîï])|([ñ])|([òóôõöø])|([ß])|([ùúûü])|([ÿ])|([æ])/g,
                                 function(str,a,c,e,i,n,o,s,u,y,ae) {
                                    if(a) return 'a';
@@ -29,10 +29,10 @@ let Menu = React.createClass({
 
         $('#menu ul li a').show();
 
-        var pesquisa = ReactDOM.findDOMNode(this.refs.search).value.trim();
+        let pesquisa = ReactDOM.findDOMNode(this.refs.search).value.trim();
 
         $.expr[':'].Contains = function(obj, index, meta, stack){
-           var val = accentFold((obj.textContent || obj.innerText || $(obj).text() || '').toLowerCase());
+           let val = accentFold((obj.textContent || obj.innerText || $(obj).text() || '').toLowerCase());
 
            return val.indexOf(accentFold(meta[3].toLowerCase())) >= 0;
         };

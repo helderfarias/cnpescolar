@@ -5,21 +5,34 @@ import Eventos from '../constants/eventos';
 import Config from '../constants/api';
 import { EventEmitter } from 'events';
 import request from 'superagent';
-import when from 'when';
 import assign from 'object-assign';
 
 let _store = {
     token: ''
 };
 
-function realizarLogin(credencias, cb) {
-    request.post(Config.seguranca.auth('/token'))
+function montarHashClientCredencials() {
+    let credenciais = Config.ClientCredencials.id + ':' + Config.ClientCredencials.secret;
+
+    return 'Basic ' + new Buffer(credenciais).toString('base64');
+}
+
+function autenticar(credencias, cb) {
+    request.post(Config.Seguranca.auth('/token'))
            .send({ username: credencias.login, password: credencias.senha })
            .set('Accept', 'application/json')
-           .set('Authorization', 'Basic Y2xpZW50aWQ6Y2xpZW50aWQwMA==')
+           .set('Authorization', montarHashClientCredencials())
            .end(function(err, res){
+               if (!err) {
+                   localStorage.setItem('gestoken', res.text);
+               }
+
                cb(err, res);
            });
+}
+
+function removerToken() {
+    localStorage.removeItem('gestoken');
 }
 
 let LoginStore = assign({}, EventEmitter.prototype, {
@@ -47,17 +60,15 @@ let LoginStore = assign({}, EventEmitter.prototype, {
 
 Dispatcher.register(function(action) {
     switch (action.actionType) {
-        case Eventos.LOGIN:
-            realizarLogin(action.credencias, function(err, res) {
-                if (err) {
-                    alert("There's an error logging in");
-                    console.log("Error logging in", err);
-                    return;
-                }
-
-                localStorage.setItem('gestoken', res.text);
+        case Eventos.Autenticacao.LOGIN:
+            autenticar(action.credencias, function(err, res) {
                 LoginStore.emitChange();
             });
+            break;
+
+        case Eventos.Autenticacao.LOGOUT:
+            removerToken();
+            LoginStore.emitChange();
             break;
 
         default:
