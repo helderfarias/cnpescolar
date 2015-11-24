@@ -1,6 +1,3 @@
-// var corsMiddleware = require('./cors');
-// var notfoundMiddleware = require('./notfound');
-
 module.exports = {
 
     cors: function() {

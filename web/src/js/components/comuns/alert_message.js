@@ -6,7 +6,7 @@ let AlertMessage = React.createClass({
 
     propTypes: {
        onClose: React.PropTypes.func,
-       rendered: React.PropTypes.bool,
+       source: React.PropTypes.array,
        severity: React.PropTypes.string
     },
 
@@ -17,23 +17,35 @@ let AlertMessage = React.createClass({
         };
     },
 
+    isNotValidSeverity() {
+        return this.props.severity != 'danger' &&
+                this.props.severity != 'info'   &&
+                this.props.severity != 'warning';
+    },
+
+    isEmpty() {
+        return !this.props.source || this.props.source.length === 0;
+    },
+
     render() {
-        if (this.props.severity != 'danger' &&
-            this.props.severity != 'info'   &&
-            this.props.severity != 'warning') {
+        if (this.isNotValidSeverity()) {
             throw Error("A propriedade [severity] deve ser: danger, info ou warning");
         }
 
-        if (!this.props.rendered) {
+        if (this.isEmpty()) {
             return (<span></span>);
         }
 
-        const level = 'alert ' + 'alert-'+this.props.severity + ' alert-dismissable';
+        let level = 'alert ' + 'alert-'+this.props.severity + ' alert-dismissable';
 
         return (
             <div className={level}>
                 <button type="button" className="close" aria-hidden="true" onClick={this.props.onClose}>×</button>
-                {this.props.children}
+                <ul>
+                    {this.props.source.map(function(m) {
+                        return (<li key={m}>{m.texto}</li>);
+                    })}
+                </ul>
             </div>
         );
     }

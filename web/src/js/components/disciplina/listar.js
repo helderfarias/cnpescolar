@@ -2,34 +2,33 @@
 
 import React from 'react';
 import { Link, History } from 'react-router';
-import AlertMessage from '../alert';
 import Modal from '../modal';
 import DisciplinaAction from '../../actions/disciplina_action';
 import DisciplinaStore from '../../stores/disciplina_store';
 
 let DisciplinaListagem = React.createClass({
 
-    getInitialState: function() {
+    getInitialState() {
         return {
             disicplinas: DisciplinaStore.getDisciplinas()
         }
     },
 
-    componentDidMount: function() {
+    componentDidMount() {
         DisciplinaStore.addChangeListener(this._onChange);
         DisciplinaAction.filtrarPor({ nome: 'Helder' });
     },
 
-    componentWillUnmount: function() {
+    componentWillUnmount() {
         DisciplinaStore.removeChangeListener(this._onChange);
     },
 
-    openFiltro: function() {
+    openFiltro() {
         this.refs.filtro.open();
     },
 
-    onFilter: function() {
-        var filtro = {
+    onFilter() {
+        let filtro = {
             nome: this.refs.nome.value.trim()
         };
 
@@ -38,12 +37,12 @@ let DisciplinaListagem = React.createClass({
         this.refs.filtro.close();
     },
 
-    _onChange: function() {
+    _onChange() {
         this.setState({ disicplinas: DisciplinaStore.getDisciplinas() });
     },
 
     render() {
-        var rows = this.state.disicplinas.map(function(item, index) {
+        let rows = this.state.disicplinas.map(function(item, index) {
             return (<tr key={index}><td>{item.id}</td><td>{item.nome}</td></tr>);
         });
 

@@ -7,44 +7,64 @@ import { EventEmitter } from 'events';
 import request from 'superagent';
 import assign from 'object-assign';
 
-var _store = {
-    disciplinas: []
-};
+var _disciplinas = [];
+var _erros = [];
 
 function consultar(cb) {
+    _erros = [];
+
     request.get(Config.Cadastro.api('/disciplinas'))
            .end(function(err, res) {
-               if (!err) {
-                   _store.disciplinas = res.body;
+               if (err) {
+                   _erros.push(err);
+               } else {
+                   _disciplinas = res.body;
                }
+
                cb();
             });
 }
 
-function cadastrar(entity, cb) {
+function salvar(disciplina, cb) {
+    _erros = [];
+
+    if (disciplina.nome === '') {
+        _erros = [{ texto: 'Nome da disciplina é obrigatório' }];
+        cb();
+        return;
+    }
+
     request.post(Config.Cadastro.api('/disciplinas'))
-           .send(entity)
+           .send(disciplina)
            .set('Accept', 'application/json')
            .end(function(err, res){
+               if (err) {
+                   _erros.push(err);
+               }
+
                cb();
            });
 }
 
-var DisciplinaStore = assign({}, EventEmitter.prototype, {
+let DisciplinaStore = assign({}, EventEmitter.prototype, {
 
-    getDisciplinas: function() {
-        return _store.disciplinas;
+    getDisciplinas() {
+        return _disciplinas;
     },
 
-    emitChange: function() {
+    getErros() {
+        return _erros;
+    },
+
+    emitChange() {
         this.emit('change');
     },
 
-    addChangeListener: function(cb) {
+    addChangeListener(cb) {
         this.on('change', cb);
     },
 
-    removeChangeListener: function(cb) {
+    removeChangeListener(cb) {
         this.removeListener('change', cb);
     }
 
@@ -59,7 +79,7 @@ Dispatcher.register(function(action) {
             break;
 
         case Eventos.Disciplina.SALVAR:
-            cadastrar(action.disciplina, function() {
+            salvar(action.disciplina, function() {
                 DisciplinaStore.emitChange();
             });
             break;

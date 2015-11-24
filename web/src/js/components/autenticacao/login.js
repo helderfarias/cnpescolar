@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react';
-import AlertMessage from '../alert';
+import AlertMessage from '../comuns/alert_message';
 import { History } from 'react-router';
 import LoginAction from '../../actions/login_action';
 import LoginStore from '../../stores/login_store';
@@ -11,17 +11,17 @@ let Login = React.createClass({
 
     getInitialState() {
         return {
-            error: false,
+            erros: LoginStore.getErros(),
             token: LoginStore.getToken()
         }
     },
 
     componentDidMount() {
-        LoginStore.addChangeListener(this._onChange);
+        LoginStore.addChangeListener(this.onChangeListener);
     },
 
     componentWillUnmount() {
-        LoginStore.removeChangeListener(this._onChange);
+        LoginStore.removeChangeListener(this.onChangeListener);
     },
 
     handleSubmit(e) {
@@ -30,17 +30,17 @@ let Login = React.createClass({
         LoginAction.login(this.refs.login.value, this.refs.senha.value);
     },
 
-    _onChange() {
+    onChangeListener() {
         if (LoginStore.isLoggedIn()) {
             this.history.replaceState(null, '/');
             return
         }
 
-        this.setState({ error: true });
+        this.setState({ erros: LoginStore.getErros() });
     },
 
-    _onAlertClose() {
-        this.setState({ error: false });
+    onAlertClose() {
+        this.setState({ erros: [] });
     },
 
     render() {
@@ -53,9 +53,7 @@ let Login = React.createClass({
                         </div>
 
                         <div className="panel-body">
-                            <AlertMessage rendered={this.state.error} severity="danger" onClose={this._onAlertClose}>
-                                <p>Credências inválida</p>
-                            </AlertMessage>
+                            <AlertMessage source={this.state.erros} severity="danger" onClose={this.onAlertClose}/>
 
                             <form role="form" onSubmit={this.handleSubmit}>
                                 <fieldset>

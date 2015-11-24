@@ -7,17 +7,17 @@ import { EventEmitter } from 'events';
 import request from 'superagent';
 import assign from 'object-assign';
 
-let _store = {
-    token: ''
-};
-
-function montarHashClientCredencials() {
-    let credenciais = Config.ClientCredencials.id + ':' + Config.ClientCredencials.secret;
-
-    return 'Basic ' + new Buffer(credenciais).toString('base64');
-}
+let _token = localStorage.getItem('gestoken');
+let _erros = [];
 
 function autenticar(credencias, cb) {
+    _erros = [];
+
+    if (!credencias || !credencias.login || !credencias.senha) {
+        _erros = [ { texto: 'Credências inválida' }];
+        return cb();
+    }
+
     request.post(Config.Seguranca.auth('/token'))
            .send({ username: credencias.login, password: credencias.senha })
            .set('Accept', 'application/json')
@@ -26,19 +26,29 @@ function autenticar(credencias, cb) {
                if (!err) {
                    localStorage.setItem('gestoken', res.text);
                }
-
-               cb(err, res);
+               cb();
            });
 }
 
 function removerToken() {
     localStorage.removeItem('gestoken');
+    _erros = [];
+}
+
+function montarHashClientCredencials() {
+    let credenciais = Config.ClientCredencials.id + ':' + Config.ClientCredencials.secret;
+
+    return 'Basic ' + new Buffer(credenciais).toString('base64');
 }
 
 let LoginStore = assign({}, EventEmitter.prototype, {
 
     getToken() {
-        return _store.token;
+        return _token;
+    },
+
+    getErros() {
+        return _erros;
     },
 
     isLoggedIn() {
@@ -61,7 +71,7 @@ let LoginStore = assign({}, EventEmitter.prototype, {
 Dispatcher.register(function(action) {
     switch (action.actionType) {
         case Eventos.Autenticacao.LOGIN:
-            autenticar(action.credencias, function(err, res) {
+            autenticar(action.credencias, function() {
                 LoginStore.emitChange();
             });
             break;
