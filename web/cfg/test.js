@@ -1,5 +1,5 @@
 var path = require('path');
-var srcPath = path.join(__dirname, '/../src/');
+var srcPath = path.join(__dirname, '/../src/js/');
 var BowerWebpackPlugin = require('bower-webpack-plugin');
 
 module.exports = {
@@ -33,10 +33,10 @@ module.exports = {
     alias: {
       actions: srcPath + 'actions/',
       helpers: path.join(__dirname, '/../test/helpers'),
-      components: srcPath + 'components/',
-      sources: srcPath + 'sources/',
-      stores: srcPath + 'stores/',
-      styles: srcPath + 'css/',
+      components: srcPath + 'components',
+      sources: srcPath + 'sources',
+      stores: srcPath + 'stores',
+      styles: srcPath + 'css',
       config: srcPath + 'config/' + process.env.REACT_WEBPACK_ENV
     }
   },

@@ -12,7 +12,7 @@ let AlertMessage = React.createClass({
 
     getDefaultProps() {
         return {
-          rendered: false,
+          source: [],
           severity: 'danger'
         };
     },
