@@ -3,6 +3,7 @@
 require('bootstrap/dist/css/bootstrap.css');
 require('font-awesome/css/font-awesome.css');
 require('../../css/app.css');
+require('../../css/pagination.css');
 require('../../css/sb-admin-2.css')
 
 require('jquery');

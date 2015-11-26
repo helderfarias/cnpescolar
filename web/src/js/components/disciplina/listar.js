@@ -5,7 +5,7 @@ import { Link, History } from 'react-router';
 import Modal from '../modal';
 import DisciplinaAction from '../../actions/disciplina_action';
 import DisciplinaStore from '../../stores/disciplina_store';
-import { DataTable, DataTableHeaderBar, DataTableFooterBar } from '../comuns/data_table';
+import DataTable from '../comuns/data_table';
 import Pagination from '../comuns/pagination';
 
 let DisciplinaListagem = React.createClass({
@@ -13,17 +13,18 @@ let DisciplinaListagem = React.createClass({
 
     getInitialState() {
         return {
-            disicplinas: DisciplinaStore.getDisciplinas()
+            itensPorPagina: 5,
+            disciplinas: DisciplinaStore.getDisciplinas(),
         }
     },
 
     componentDidMount() {
-        DisciplinaStore.addChangeListener(this._onChange);
+        DisciplinaStore.addChangeListener(this.onChangeListener);
         DisciplinaAction.filtrarPor({ nome: 'Helder' });
     },
 
     componentWillUnmount() {
-        DisciplinaStore.removeChangeListener(this._onChange);
+        DisciplinaStore.removeChangeListener(this.onChangeListener);
     },
 
     openFiltro() {
@@ -40,8 +41,18 @@ let DisciplinaListagem = React.createClass({
         this.refs.filtro.close();
     },
 
-    _onChange() {
-        this.setState({ disicplinas: DisciplinaStore.getDisciplinas() });
+    onChangeListener() {
+        // this.setState({ disciplinas: DisciplinaStore.getDisciplinas() });
+        var json = require("json!../../sources/disciplinas.json");
+        this.setState({ disciplinas: json });
+    },
+
+    paginar(pagina) {
+        this.setState({});
+    },
+
+    alterarNumeroPaginas(tamanho) {
+        this.setState({ itensPorPagina: tamanho });
     },
 
     render() {
@@ -53,18 +64,27 @@ let DisciplinaListagem = React.createClass({
 
                 <div className="row">
                     <div className="col-lg-12">
-                        <DataTable source={this.state.disicplinas}
-                                    columns={[ { name: 'id', title: '#' }, { name: 'nome', title: 'Nome' }]}
-                                    numberOfPages={5}
-                                    totalItems={100}>
-                            <DataTableHeaderBar position={'right'}>
-                                <Link to="/disciplina/novo" className="btn btn-default btn-md"><i className="fa fa-plus-circle"></i> </Link>
-                                <a className="btn btn-default btn-md" onClick={this.openFiltro}><i className="fa fa-filter"></i> </a>
-                            </DataTableHeaderBar>
-                            <DataTableFooterBar>
-                                <Pagination totalItems={100} numberOfPages={10}/>
-                            </DataTableFooterBar>
-                        </DataTable>
+                        <div className="panel panel-default">
+                            <div className="panel-heading clearfix">
+                                <div className="btn-group pull-right">
+                                    <Link to="/disciplina/novo" className="btn btn-default btn-md"><i className="fa fa-plus-circle"></i> </Link>
+                                    <a className="btn btn-default btn-md" onClick={this.openFiltro}><i className="fa fa-filter"></i> </a>
+                                </div>
+                            </div>
+
+                            <div className="panel-body clearfix">
+                                <DataTable source={this.state.disciplinas}
+                                            columns={[ { name: 'id', title: '#' }, { name: 'nome', title: 'Nome' }]}/>
+                            </div>
+
+                            <div className="panel-footer">
+                                <Pagination position={'right'}
+                                            itemsPerPage={this.state.itensPorPagina}
+                                            totalCount={this.state.disciplinas.length}
+                                            onChangePage={this.paginar}
+                                            onChangePageSize={this.alterarNumeroPaginas} />
+                            </div>
+                        </div>
                     </div>
                 </div>
 

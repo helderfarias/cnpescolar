@@ -16,26 +16,6 @@ let DataTable = React.createClass({
         }
     },
 
-    renderHeaderChildren() {
-        return React.Children.map(this.props.children, function(child) {
-            if (child.type === DataTableHeaderBar.type) {
-                return React.cloneElement(child, { name: this.props.name });
-            }
-
-            return child
-        }.bind(this));
-    },
-
-    renderFooterChildren() {
-        return React.Children.map(this.props.children, function(child) {
-            if (child.type === DataTableFooterBar.type) {
-                return React.cloneElement(child, { name: this.props.name });
-            }
-
-            return child
-        }.bind(this));
-    },
-
     createColumns() {
         if (this.isEmptyList(this.props.columns)) {
             console.error('columns is empty');
@@ -79,55 +59,17 @@ let DataTable = React.createClass({
 
     render() {
         return (
-            <div className="panel panel-default">
-                <div className="panel-heading clearfix">
-                    {this.renderHeaderChildren()}
-                </div>
-
-                <div className="table-responsive">
-                    <table className="table">
-                        <thead>
-                            <tr>{this.createColumns()}</tr>
-                        </thead>
-                        <tbody>{this.createRows()}</tbody>
-                    </table>
-                </div>
-
-                {this.renderFooterChildren()}
+            <div className="table-responsive">
+                <table className="table">
+                    <thead>
+                        <tr>{this.createColumns()}</tr>
+                    </thead>
+                    <tbody>{this.createRows()}</tbody>
+                </table>
             </div>
         );
     }
 
 });
 
-let DataTableHeaderBar = React.createClass({
-
-    getInitialState() {
-       return { position: 'right' };
-    },
-
-    render() {
-        const styleClass = 'btn-group pull-' + this.props.position;
-
-        return (
-            <div className={styleClass}>
-                {this.props.children}
-            </div>
-        );
-    }
-
-});
-
-let DataTableFooterBar = React.createClass({
-
-    render() {
-        return (
-            <div>{this.props.children}</div>
-        );
-    }
-
-});
-
-exports.DataTable = DataTable;
-exports.DataTableHeaderBar = DataTableHeaderBar;
-exports.DataTableFooterBar = DataTableFooterBar;
+export default DataTable;

@@ -4,61 +4,50 @@ import React from 'react';
 
 let Pagination = React.createClass({
 
-    propTypes: {
-       numberOfPages: React.PropTypes.number,
-       totalItems: React.PropTypes.number
-    },
-
     getInitialState() {
         return {
-            currentPage: 0
+            currentPage: 1
         };
     },
 
     getDefaultProps() {
         return {
-            numberOfPages: 10,
-            totalItems: 0
+            itemsPerPage: 10,
+            totalCount: 0,
+            previousText: 'Anterior',
+            nextText: 'Próximo',
+            firstText: 'Primeiro',
+            lastText: 'Último'
         }
     },
 
     onSelectPage(page) {
-        this.setState({ currentPage : page });
+        if (this.props.onChangePage) {
+            this.props.onChangePage(page);
+        }
+
+        this.setState({ currentPage: page });
     },
 
-    render() {
-        let itemsPerPage = 10;
-        let totalRecords = 100;
-        let totalPages = (totalRecords / itemsPerPage);
+    onSelectPageSize(size) {
+        if (this.props.onChangePageSize) {
+            this.props.onChangePageSize(size);
+        }
+    },
+
+    calculateTotalPages() {
+        let total = Math.ceil(this.props.totalCount / this.props.itemsPerPage);
+
+        return Math.max(total, 1);
+    },
+
+    calculatePages(totalPages, maxSize) {
         let currentPage = this.state.currentPage;
-        let maxSize = 2; // how many pages to display before and after the current page
-        let pages = [];
-        let prevPage = null;
-        let nextPage = null;
-
-        if (totalPages === 1) {
-            return;
-        }
-
-        if (currentPage > 1) {
-            prevPage = (<BoundaryPageLink active={true} label="Anterior" page={currentPage - 1} onPage={this.onSelectPage}/>);
-        } else {
-            prevPage = (<BoundaryPageLink active={false} label="Anterior" page={currentPage - 1} onPage={this.onSelectPage}/>);
-        }
-
-        if (currentPage == 1) {
-            pages.push({ page:1, active: true });
-        } else {
-            pages.push({ page:1, active: false });
-        }
-
-        // besides the first and last page, how many pages do we need to display?
         let how_many_times = 2 * maxSize + 1;
         let left = Math.max(2, currentPage - 2 * maxSize - 1);
         let right = Math.min(totalPages - 1, currentPage + 2 * maxSize + 1);
+        let pages = [];
 
-        // the upper range restricted by left and right are more loosely than we need,
-        // so we further restrict this range we need to display
         while (right - left > 2 * maxSize) {
             if (currentPage - left < right - currentPage) {
                 right--;
@@ -69,7 +58,6 @@ let Pagination = React.createClass({
             }
         }
 
-        // now display the middle pages, we display how_many_times pages from page left
         for (let i = 1, out = left; i <= how_many_times; i++, out++) {
             if (out > right) {
                 continue;
@@ -82,50 +70,160 @@ let Pagination = React.createClass({
             }
         }
 
-        // always display the last page
-        if (currentPage == totalPages) {
-            pages.push({ page: totalPages, active: true });
-        } else {
-            pages.push({ page: totalPages, active: false });
+        return {
+            pages: pages,
+            left: left,
+            right: right
+        };
+    },
+
+    calculatePageSizeConfig() {
+        return {
+            fromPage: ((this.state.currentPage - 1) * this.props.itemsPerPage) + 1,
+            toPage: (this.state.currentPage * this.props.itemsPerPage)
+        };
+    },
+
+    empty() {
+        let pageSizeConfig = this.calculatePageSizeConfig();
+
+        return (
+            <nav className={this.props.position}>
+                <div className="row fixed-table-pagination-row">
+                    <div className="fixed-table-pagination">
+                        <div className="pull-left pagination-detail">
+                            <PageSize fromPage={pageSizeConfig.fromPage}
+                                        toPage={pageSizeConfig.toPage}
+                                        totalCount={this.props.totalCount}
+                                        onPageSize={this.onSelectPageSize}/>
+                        </div>
+
+                        <div className="pull-right pagination">
+                            <nav className={this.props.position}>
+                                <ul className="pagination">
+                                    <BoundaryPageLink active={false} label={this.props.firstText} />
+                                    <BoundaryPageLink active={false} label={this.props.previousText} />
+                                    <PageLink active={true} page={1} />
+                                    <BoundaryPageLink active={false} label={this.props.nextText} />
+                                    <BoundaryPageLink active={false} label={this.props.lastText}/>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        );
+    },
+
+    render() {
+        let currentPage = this.state.currentPage;
+        let maxSize = 5;
+        let pages = [];
+        let prevPage = null;
+        let nextPage = null;
+        let firstPage = null;
+        let lastPage = null;
+        let infinityPagesLeft = null;
+        let infinityPagesRight = null;
+
+        let totalPages = this.calculateTotalPages();
+        if (totalPages === 1) {
+            return this.empty();
         }
 
-        // if we are not at the last page, then display the "Next" button
-        if (currentPage < totalPages) {
-            nextPage = (<BoundaryPageLink active={true} label="Próximo" page={currentPage + 1} onPage={this.onSelectPage}/>);
+        let pageSizeConfig = this.calculatePageSizeConfig();
+
+        if (currentPage > 1) {
+            prevPage = { page: (currentPage - 1), active: true };
         } else {
-            nextPage = (<BoundaryPageLink active={false} label="Proxímo" page={currentPage + 1} onPage={this.onSelectPage}/>);
+            prevPage = { page: (currentPage - 1), active: false };
+        }
+
+        if (currentPage == 1) {
+            pages.push({ page:1, active: true });
+            firstPage = { page: 1, active: false };
+        } else {
+            pages.push({ page: 1, active: false });
+            firstPage = { page: 1, active: true };
+        }
+
+        let paginate = this.calculatePages();
+        if (paginate.left >= 3) {
+            infinityPagesLeft = { active: false };
+        }
+
+        paginate.pages.map((page, index) => {
+            pages.push(page);
+        });
+
+        if (currentPage == totalPages) {
+            pages.push({ page: totalPages, active: true });
+            lastPage = { page: totalPages, active: false };
+        } else {
+            pages.push({ page: totalPages, active: false });
+            lastPage = { page: totalPages, active: true };
+        }
+
+        if ((totalPages - paginate.right) >= 2) {
+            infinityPagesRight = { active: false };
+        }
+
+        if (currentPage < totalPages) {
+            nextPage = { page: (currentPage + 1), active: true };
+        } else {
+            nextPage = { page: (currentPage + 1), active: false };
         }
 
         return (
-            <div className="panel-footer right">
-                <ul className="pagination">
-                    {prevPage}
+            <div className="row fixed-table-pagination-row">
+                <div className="fixed-table-pagination">
+                    <div className="pull-left pagination-detail">
+                        <PageSize fromPage={pageSizeConfig.fromPage}
+                                    toPage={pageSizeConfig.toPage}
+                                    totalCount={this.props.totalCount}
+                                    onPageSize={this.onSelectPageSize}/>
+                    </div>
 
-                    {pages.map((item, index) => {
-                        return (<PageLink key={index} page={item.page} active={item.active} onPage={this.onSelectPage}/>);
-                    })}
+                    <div className="pull-right pagination">
+                        <nav className={this.props.position}>
+                            <ul className="pagination">
+                                <BoundaryPageLink active={firstPage.active} label={this.props.firstText} page={firstPage.page} onPage={this.onSelectPage}/>
 
-                    {nextPage}
-                </ul>
+                                <BoundaryPageLink active={prevPage.active} label={this.props.previousText} page={prevPage.page} onPage={this.onSelectPage}/>
+
+                                {infinityPagesLeft ? (<BoundaryPageLink active={false} label="..."/>) : ''}
+
+                                {pages.map((item, index) => {
+                                    return (<PageLink key={index} page={item.page} active={item.active} onPage={this.onSelectPage}/>);
+                                })}
+
+                                {infinityPagesRight ? (<BoundaryPageLink active={false} label="..."/>) : ''}
+
+                                <BoundaryPageLink active={nextPage.active} label={this.props.nextText} page={nextPage.page} onPage={this.onSelectPage}/>
+
+                                <BoundaryPageLink active={lastPage.active} label={this.props.lastText} page={lastPage.page} onPage={this.onSelectPage}/>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
             </div>
         );
     }
-
 });
 
 let PageLink = React.createClass({
 
-    propTypes: {
-       onPage: React.PropTypes.func,
-       active: React.PropTypes.bool
-    },
-
     getDefaultProps() {
-        return {  page: 0, active: false };
+        return {
+            page: 0,
+            active: false
+        };
     },
 
     onChangePage() {
-        this.props.onPage(this.props.page);
+        if (this.props.onPage) {
+            this.props.onPage(this.props.page);
+        }
     },
 
     render() {
@@ -144,18 +242,18 @@ let PageLink = React.createClass({
 
 let BoundaryPageLink = React.createClass({
 
-    propTypes: {
-       onPage: React.PropTypes.func,
-       label: React.PropTypes.string,
-       active: React.PropTypes.bool
-    },
-
     getDefaultProps() {
-        return {  page: 0, label: '' };
+        return {
+            page: 0,
+            label: '',
+            active: false
+        };
     },
 
     onChangePage() {
-        this.props.onPage(this.props.page);
+        if (this.props.onPage) {
+            this.props.onPage(this.props.page);
+        }
     },
 
     render() {
@@ -167,6 +265,48 @@ let BoundaryPageLink = React.createClass({
                     <span aria-hidden="true">{this.props.label}</span>
                 </a>
             </li>
+        );
+    }
+
+});
+
+let PageSize = React.createClass({
+
+    getDefaultProps() {
+        return {
+            fromPage: 0,
+            toPage: 0,
+            totalCount: 0,
+            pageSize: [5, 10, 20, 50, 100]
+        }
+    },
+
+    _onChange(e) {
+        if (this.props.onPageSize) {
+            this.props.onPageSize(e.target.value);
+        }
+    },
+
+    getOptions() {
+        let items = this.props.pageSize.map((size, index) => {
+            return (<option key={index} value={size}>{size}</option>)
+        });
+
+        return items;
+    },
+
+    render() {
+        return (
+            <div className="page-size-info">
+                <span className="pagination-info"> Exibindo {this.props.fromPage} até {this.props.toPage} de {this.props.totalCount} registros </span>
+                <span className="page-list">
+                    <span className="btn-group dropup">
+                        <select className="form-control" onChange={this._onChange}>
+                            {this.getOptions()}
+                        </select>
+                    </span>
+                </span>
+            </div>
         );
     }
 
