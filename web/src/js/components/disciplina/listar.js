@@ -5,6 +5,8 @@ import { Link, History } from 'react-router';
 import Modal from '../modal';
 import DisciplinaAction from '../../actions/disciplina_action';
 import DisciplinaStore from '../../stores/disciplina_store';
+import { DataTable, DataTableHeaderBar, DataTableFooterBar } from '../comuns/data_table';
+import Pagination from '../comuns/pagination';
 
 let DisciplinaListagem = React.createClass({
     mixins: [ History ],
@@ -43,38 +45,26 @@ let DisciplinaListagem = React.createClass({
     },
 
     render() {
-        let rows = this.state.disicplinas.map(function(item, index) {
-            return (<tr key={index}><td>{item.id}</td><td>{item.nome}</td></tr>);
-        });
-
         return (
             <div className="row">
                 <div className="col-lg-12">
                     <h3 className="page-header">List</h3>
                 </div>
 
-                <div className="col-lg-12">
-                    <div className="panel panel-default">
-                        <div className="panel-heading clearfix">
-                            <div className="btn-group pull-right">
+                <div className="row">
+                    <div className="col-lg-12">
+                        <DataTable source={this.state.disicplinas}
+                                    columns={[ { name: 'id', title: '#' }, { name: 'nome', title: 'Nome' }]}
+                                    numberOfPages={5}
+                                    totalItems={100}>
+                            <DataTableHeaderBar position={'right'}>
                                 <Link to="/disciplina/novo" className="btn btn-default btn-md"><i className="fa fa-plus-circle"></i> </Link>
                                 <a className="btn btn-default btn-md" onClick={this.openFiltro}><i className="fa fa-filter"></i> </a>
-                            </div>
-                        </div>
-
-                        <div className="table-responsive">
-                            <table className="table">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Nome</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {rows}
-                                </tbody>
-                            </table>
-                        </div>
+                            </DataTableHeaderBar>
+                            <DataTableFooterBar>
+                                <Pagination totalItems={100} numberOfPages={10}/>
+                            </DataTableFooterBar>
+                        </DataTable>
                     </div>
                 </div>
 

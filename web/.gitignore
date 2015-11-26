@@ -6,6 +6,7 @@ pids
 lib-cov
 coverage
 .grunt
+.DS_Store
 .lock-wscript
 build/Release
 node_modules
