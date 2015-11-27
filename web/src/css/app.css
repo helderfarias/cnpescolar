@@ -14,29 +14,3 @@
 .left {
     text-align: left;
 }
-
-.fixed-table-pagination .pagination-detail, .fixed-table-pagination div.pagination {
-    margin-top: 10px;
-    margin-bottom: 10px;
-}
-
-.pull-left {
-    float: left!important;
-}
-
-.pull-left {
-    float: left!important;
-}
-
-.fixed-table-pagination div.pagination {
-    margin-top: 10px;
-    margin-bottom: 10px
-}
-
-.fixed-table-pagination div.pagination .pagination {
-    margin: 0;
-}
-
-.fixed-table-pagination-row {
-    margin: 0 1em;
-}

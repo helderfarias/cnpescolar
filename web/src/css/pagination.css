@@ -23,3 +23,7 @@
 .fixed-table-pagination-row {
     margin: 0 1em;
 }
+
+.table-columns-selection {
+    width: 25px;
+}
