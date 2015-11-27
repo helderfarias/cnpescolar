@@ -87,10 +87,11 @@ let DisciplinaListagem = React.createClass({
 
                             <div className="panel-footer">
                                 <Pagination position={'right'}
-                                            pageSize={[10, 20, 30, 40, 50, 100]}
+                                            pageSize={[3, 5, 10, 20, 30, 40, 50, 100]}
                                             totalCount={this.state.totalRegistros}
                                             onChangePage={this.paginar}
-                                            onChangePageSize={this.limitPagina}>
+                                            onChangePageSize={this.limitPagina}
+                                            initialItemsPerPage={3}>
                                 </Pagination>
                             </div>
                         </div>

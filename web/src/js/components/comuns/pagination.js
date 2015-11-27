@@ -2,54 +2,29 @@
 
 import React from 'react';
 
-class PageEvent {
-
-    constructor(npage, nlimit, nfrom, nto) {
-        this._page = npage;
-        this._limit = nlimit;
-        this._from = nfrom;
-        this._to = nto;
-    }
-
-    get page() {
-       return this._page;
-    }
-
-    get limit() {
-       return this._limit;
-    }
-
-    get from() {
-       return this._from;
-    }
-
-    get to() {
-       return this._to;
-    }
-
-    toString() {
-       return `${this._page} ${this._limit} ${this._from} ${this._to}`;
-    }
-
-};
-
 let Pagination = React.createClass({
 
     getInitialState() {
         return {
             currentPage: 1,
-            itemsPerPage: 5
+            itemsPerPage: 0,
         };
     },
 
     getDefaultProps() {
         return {
+            initialItemsPerPage: 5,
             totalCount: 0,
+            pageSize: [5, 10, 20, 50, 100],
             previousText: 'Anterior',
             nextText: 'Próximo',
             firstText: 'Primeiro',
             lastText: 'Último'
         }
+    },
+
+    componentDidMount() {
+        this.setState({ itemsPerPage: this.props.initialItemsPerPage });
     },
 
     onSelectPage(page) {
@@ -129,6 +104,7 @@ let Pagination = React.createClass({
                         <div className="pull-left pagination-detail">
                             <PageSize fromPage={pageSizeConfig.fromPage}
                                         toPage={pageSizeConfig.toPage}
+                                        limits={this.props.pageSize}
                                         totalCount={this.props.totalCount}
                                         onPageSize={this.onSelectPageSize}
                                         selected={this.state.itemsPerPage}/>
@@ -218,6 +194,7 @@ let Pagination = React.createClass({
                                     toPage={pageSizeConfig.toPage}
                                     totalCount={this.props.totalCount}
                                     onPageSize={this.onSelectPageSize}
+                                    limits={this.props.pageSize}
                                     selected={this.state.itemsPerPage}/>
                     </div>
 
@@ -248,6 +225,7 @@ let Pagination = React.createClass({
     }
 });
 
+
 let PageLink = React.createClass({
 
     getDefaultProps() {
@@ -276,6 +254,7 @@ let PageLink = React.createClass({
     }
 
 });
+
 
 let BoundaryPageLink = React.createClass({
 
@@ -307,6 +286,7 @@ let BoundaryPageLink = React.createClass({
 
 });
 
+
 let PageSize = React.createClass({
 
     getDefaultProps() {
@@ -315,7 +295,7 @@ let PageSize = React.createClass({
             fromPage: 0,
             toPage: 0,
             totalCount: 0,
-            pageSize: [5, 10, 20, 50, 100]
+            limits: []
         }
     },
 
@@ -331,7 +311,7 @@ let PageSize = React.createClass({
     },
 
     render() {
-        let items = this.props.pageSize.map((size, index) => {
+        let items = this.props.limits.map((size, index) => {
             return (<option key={index} value={size}>{size}</option>)
         });
 
@@ -350,6 +330,38 @@ let PageSize = React.createClass({
     }
 
 });
+
+
+class PageEvent {
+
+    constructor(npage, nlimit, nfrom, nto) {
+        this._page = npage;
+        this._limit = nlimit;
+        this._from = nfrom;
+        this._to = nto;
+    }
+
+    get page() {
+       return this._page;
+    }
+
+    get limit() {
+       return this._limit;
+    }
+
+    get from() {
+       return this._from;
+    }
+
+    get to() {
+       return this._to;
+    }
+
+    toString() {
+       return `${this._page} ${this._limit} ${this._from} ${this._to}`;
+    }
+
+};
 
 
 export default Pagination;
