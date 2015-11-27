@@ -14,13 +14,19 @@ let DisciplinaListagem = React.createClass({
     getInitialState() {
         return {
             itensPorPagina: 5,
+            totalRegistros: 0,
             disciplinas: DisciplinaStore.getDisciplinas(),
         }
     },
 
     componentDidMount() {
         DisciplinaStore.addChangeListener(this.onChangeListener);
-        DisciplinaAction.filtrarPor({ nome: 'Helder' });
+
+        // DisciplinaAction.filtrarPor({ nome: 'Helder' });
+
+        const json = require("json!../../sources/disciplinas.json");
+        var newDisciplinas = json.slice(1, this.state.itensPorPagina);
+        this.setState({ totalRegistros: json.length, disciplinas: newDisciplinas });
     },
 
     componentWillUnmount() {
@@ -42,17 +48,19 @@ let DisciplinaListagem = React.createClass({
     },
 
     onChangeListener() {
-        // this.setState({ disciplinas: DisciplinaStore.getDisciplinas() });
-        var json = require("json!../../sources/disciplinas.json");
-        this.setState({ disciplinas: json });
+        this.setState({ disciplinas: DisciplinaStore.getDisciplinas() });
     },
 
-    paginar(pagina) {
-        this.setState({});
+    paginar(e) {
+        const json = require("json!../../sources/disciplinas.json");
+        var newDisciplinas = json.slice(e.from - 1, e.to);
+        this.setState({ totalRegistros: json.length, disciplinas: newDisciplinas });
     },
 
-    alterarNumeroPaginas(tamanho) {
-        this.setState({ itensPorPagina: tamanho });
+    limitPagina(e) {
+        const json = require("json!../../sources/disciplinas.json");
+        var newDisciplinas = json.slice(e.from - 1, e.to);
+        this.setState({ totalRegistros: json.length, disciplinas: newDisciplinas });
     },
 
     render() {
@@ -79,10 +87,11 @@ let DisciplinaListagem = React.createClass({
 
                             <div className="panel-footer">
                                 <Pagination position={'right'}
-                                            itemsPerPage={this.state.itensPorPagina}
-                                            totalCount={this.state.disciplinas.length}
+                                            pageSize={[10, 20, 30, 40, 50, 100]}
+                                            totalCount={this.state.totalRegistros}
                                             onChangePage={this.paginar}
-                                            onChangePageSize={this.alterarNumeroPaginas} />
+                                            onChangePageSize={this.limitPagina}>
+                                </Pagination>
                             </div>
                         </div>
                     </div>

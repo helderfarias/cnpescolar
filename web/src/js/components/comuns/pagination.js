@@ -2,17 +2,48 @@
 
 import React from 'react';
 
+class PageEvent {
+
+    constructor(npage, nlimit, nfrom, nto) {
+        this._page = npage;
+        this._limit = nlimit;
+        this._from = nfrom;
+        this._to = nto;
+    }
+
+    get page() {
+       return this._page;
+    }
+
+    get limit() {
+       return this._limit;
+    }
+
+    get from() {
+       return this._from;
+    }
+
+    get to() {
+       return this._to;
+    }
+
+    toString() {
+       return `${this._page} ${this._limit} ${this._from} ${this._to}`;
+    }
+
+};
+
 let Pagination = React.createClass({
 
     getInitialState() {
         return {
-            currentPage: 1
+            currentPage: 1,
+            itemsPerPage: 5
         };
     },
 
     getDefaultProps() {
         return {
-            itemsPerPage: 10,
             totalCount: 0,
             previousText: 'Anterior',
             nextText: 'Próximo',
@@ -23,20 +54,24 @@ let Pagination = React.createClass({
 
     onSelectPage(page) {
         if (this.props.onChangePage) {
-            this.props.onChangePage(page);
+            let config = this.calculatePageSize(page);
+
+            this.props.onChangePage(new PageEvent(page, this.state.itemsPerPage, config.fromPage, config.toPage));
         }
 
         this.setState({ currentPage: page });
     },
 
-    onSelectPageSize(size) {
+    onSelectPageSize(e) {
         if (this.props.onChangePageSize) {
-            this.props.onChangePageSize(size);
+            this.props.onChangePageSize(new PageEvent(1, e.limit, 1, e.limit));
         }
+
+        this.setState({ itemsPerPage: e.limit, currentPage: 1 });
     },
 
     calculateTotalPages() {
-        let total = Math.ceil(this.props.totalCount / this.props.itemsPerPage);
+        let total = Math.ceil(this.props.totalCount / this.state.itemsPerPage);
 
         return Math.max(total, 1);
     },
@@ -77,15 +112,15 @@ let Pagination = React.createClass({
         };
     },
 
-    calculatePageSizeConfig() {
+    calculatePageSize(page) {
         return {
-            fromPage: ((this.state.currentPage - 1) * this.props.itemsPerPage) + 1,
-            toPage: (this.state.currentPage * this.props.itemsPerPage)
+            fromPage: ((page - 1) * this.state.itemsPerPage) + 1,
+            toPage: (page * this.state.itemsPerPage)
         };
     },
 
     empty() {
-        let pageSizeConfig = this.calculatePageSizeConfig();
+        let pageSizeConfig = this.calculatePageSize(this.state.currentPage);
 
         return (
             <nav className={this.props.position}>
@@ -95,7 +130,8 @@ let Pagination = React.createClass({
                             <PageSize fromPage={pageSizeConfig.fromPage}
                                         toPage={pageSizeConfig.toPage}
                                         totalCount={this.props.totalCount}
-                                        onPageSize={this.onSelectPageSize}/>
+                                        onPageSize={this.onSelectPageSize}
+                                        selected={this.state.itemsPerPage}/>
                         </div>
 
                         <div className="pull-right pagination">
@@ -117,7 +153,7 @@ let Pagination = React.createClass({
 
     render() {
         let currentPage = this.state.currentPage;
-        let maxSize = 5;
+        let maxSize = 2;
         let pages = [];
         let prevPage = null;
         let nextPage = null;
@@ -131,7 +167,7 @@ let Pagination = React.createClass({
             return this.empty();
         }
 
-        let pageSizeConfig = this.calculatePageSizeConfig();
+        let pageSizeConfig = this.calculatePageSize(currentPage);
 
         if (currentPage > 1) {
             prevPage = { page: (currentPage - 1), active: true };
@@ -140,14 +176,14 @@ let Pagination = React.createClass({
         }
 
         if (currentPage == 1) {
-            pages.push({ page:1, active: true });
+            pages.push({ page: 1, active: true });
             firstPage = { page: 1, active: false };
         } else {
             pages.push({ page: 1, active: false });
             firstPage = { page: 1, active: true };
         }
 
-        let paginate = this.calculatePages();
+        let paginate = this.calculatePages(totalPages, maxSize);
         if (paginate.left >= 3) {
             infinityPagesLeft = { active: false };
         }
@@ -181,7 +217,8 @@ let Pagination = React.createClass({
                         <PageSize fromPage={pageSizeConfig.fromPage}
                                     toPage={pageSizeConfig.toPage}
                                     totalCount={this.props.totalCount}
-                                    onPageSize={this.onSelectPageSize}/>
+                                    onPageSize={this.onSelectPageSize}
+                                    selected={this.state.itemsPerPage}/>
                     </div>
 
                     <div className="pull-right pagination">
@@ -274,6 +311,7 @@ let PageSize = React.createClass({
 
     getDefaultProps() {
         return {
+            selected: 0,
             fromPage: 0,
             toPage: 0,
             totalCount: 0,
@@ -283,26 +321,27 @@ let PageSize = React.createClass({
 
     _onChange(e) {
         if (this.props.onPageSize) {
-            this.props.onPageSize(e.target.value);
+            this.props.onPageSize(new PageEvent(this.props.fromPage,
+                                                    parseInt(e.target.value),
+                                                    this.props.fromPage,
+                                                    this.props.toPage));
         }
+
+        this.setState({});
     },
 
-    getOptions() {
+    render() {
         let items = this.props.pageSize.map((size, index) => {
             return (<option key={index} value={size}>{size}</option>)
         });
 
-        return items;
-    },
-
-    render() {
         return (
             <div className="page-size-info">
                 <span className="pagination-info"> Exibindo {this.props.fromPage} até {this.props.toPage} de {this.props.totalCount} registros </span>
                 <span className="page-list">
                     <span className="btn-group dropup">
-                        <select className="form-control" onChange={this._onChange}>
-                            {this.getOptions()}
+                        <select className="form-control" onChange={this._onChange} value={this.props.selected}>
+                            {items}
                         </select>
                     </span>
                 </span>
@@ -311,5 +350,6 @@ let PageSize = React.createClass({
     }
 
 });
+
 
 export default Pagination;
