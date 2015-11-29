@@ -6,7 +6,7 @@ let DataTable = React.createClass({
 
     getInitialState() {
         return {
-            selectedRows: false
+            allRowsSelected: false
         }
     },
 
@@ -17,12 +17,18 @@ let DataTable = React.createClass({
         }
     },
 
-    selectAllRows(cb) {
-        if (cb) {
-            cb();
-        }
+    _selectAllRows(e) {
+        let checked = !this.state.allRowsSelected;
 
-        this.setState({ selectedRows: !this.state.selectedRows })
+        this.props.source.map((row, rowIndex) => {
+            if (checked) {
+                this.refs['dataTableRow' + rowIndex]._select();
+            } else {
+                this.refs['dataTableRow' + rowIndex]._deselect();
+            }
+        });
+
+        this.setState({ allRowsSelected: checked });
     },
 
     createColumns() {
@@ -35,7 +41,7 @@ let DataTable = React.createClass({
 
         cols.push((
             <th key={0}>
-                <input type="checkbox" name="selectAll" value="#" onClick={this.selectAllRows}/>
+                <input type="checkbox" name="selectAll" value={this.state.allRowsSelected} onClick={this._selectAllRows}/>
             </th>
         ));
 
@@ -58,10 +64,10 @@ let DataTable = React.createClass({
         }
 
         let rows = this.props.source.map((row, rowIndex) => {
-            return (<TableRow key={rowIndex}
+            return (<TableRow ref={'dataTableRow' + rowIndex}
+                                key={rowIndex}
                                 value={row}
                                 columns={this.props.columns}
-                                initialSelected={this.state.selectedRows}
                                 onChageRow={this.chageRow}/>);
         });
 
@@ -105,21 +111,20 @@ let TableRow = React.createClass({
         }
     },
 
-    componentDidMount() {
-        this.props.onSelectRow(this._onChange);
-    },
-
-    _onChange() {
-        console.log('ok');
-    },
-
-    selectRow(e) {
+    selectRow() {
         this.setState({ selection: !this.state.selection })
     },
 
-    render() {
-        let checked = (this.props.initialSelected || this.state.selection);
+    _select() {
+        this.setState({ selection: true });
+    },
 
+    _deselect() {
+        this.setState({ selection: false });
+    },
+
+    render() {
+        let checked = this.state.selection;
         let items = [];
 
         items.push((
