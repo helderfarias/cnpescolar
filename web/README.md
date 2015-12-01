@@ -36,6 +36,14 @@ npm run copy
         </div>
     </div>
 </code>
+
+<code>
+    // DisciplinaAction.filtrarPor({ nome: 'Helder' });
+
+    const json = require("json!../../sources/disciplinas.json");
+    var newDisciplinas = json.slice(0, this.state.itensPorPagina);
+    this.setState({ totalRegistros: json.length, disciplinas: newDisciplinas });
+</code>
 ```
 
 # Referências

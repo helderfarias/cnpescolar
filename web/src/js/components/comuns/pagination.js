@@ -13,8 +13,8 @@ let Pagination = React.createClass({
 
     getDefaultProps() {
         return {
-            initialItemsPerPage: 5,
             totalCount: 0,
+            initialItemsPerPage: 5,
             pageSize: [5, 10, 20, 50, 100],
             previousText: 'Anterior',
             nextText: 'Próximo',
@@ -24,7 +24,7 @@ let Pagination = React.createClass({
     },
 
     componentDidMount() {
-        this.setState({ itemsPerPage: this.props.initialItemsPerPage });
+        this.setState({ itemsPerPage: this.props.initialItemsPerPage});
     },
 
     onSelectPage(page) {
@@ -38,8 +38,8 @@ let Pagination = React.createClass({
     },
 
     onSelectPageSize(e) {
-        if (this.props.onChangePageSize) {
-            this.props.onChangePageSize(new PageEvent(1, e.limit, 1, e.limit));
+        if (this.props.onChangePage) {
+            this.props.onChangePage(new PageEvent(1, e.limit, 1, e.limit));
         }
 
         this.setState({ itemsPerPage: e.limit, currentPage: 1 });

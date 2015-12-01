@@ -5,7 +5,7 @@ import { Link, History } from 'react-router';
 import Modal from '../modal';
 import DisciplinaAction from '../../actions/disciplina_action';
 import DisciplinaStore from '../../stores/disciplina_store';
-import DataTable from '../comuns/data_table';
+import DataTable from '../comuns/datatable';
 import Pagination from '../comuns/pagination';
 
 let DisciplinaListagem = React.createClass({
@@ -13,7 +13,7 @@ let DisciplinaListagem = React.createClass({
 
     getInitialState() {
         return {
-            itensPorPagina: 5,
+            itensPorPagina: 10,
             totalRegistros: 0,
             disciplinas: DisciplinaStore.getDisciplinas(),
         }
@@ -21,12 +21,6 @@ let DisciplinaListagem = React.createClass({
 
     componentDidMount() {
         DisciplinaStore.addChangeListener(this.onChangeListener);
-
-        // DisciplinaAction.filtrarPor({ nome: 'Helder' });
-
-        const json = require("json!../../sources/disciplinas.json");
-        var newDisciplinas = json.slice(1, this.state.itensPorPagina);
-        this.setState({ totalRegistros: json.length, disciplinas: newDisciplinas });
     },
 
     componentWillUnmount() {
@@ -52,15 +46,19 @@ let DisciplinaListagem = React.createClass({
     },
 
     paginar(e) {
-        const json = require("json!../../sources/disciplinas.json");
-        var newDisciplinas = json.slice(e.from - 1, e.to);
-        this.setState({ totalRegistros: json.length, disciplinas: newDisciplinas });
+        var disciplinas = this.state.disciplinas.slice(e.from - 1, e.to);
+
+        this.setState({ totalRegistros: disciplinas.length, disciplinas: disciplinas });
     },
 
-    limitPagina(e) {
-        const json = require("json!../../sources/disciplinas.json");
-        var newDisciplinas = json.slice(e.from - 1, e.to);
-        this.setState({ totalRegistros: json.length, disciplinas: newDisciplinas });
+    alterar(e) {
+        console.log('alterar', e);
+        alert('Alterar: ' + e.value.id + ', ' + e.value.nome);
+    },
+
+    excluir(e) {
+        console.log('excluir', e);
+        alert('Excluir: ' + e.value.id + ', ' + e.value.nome);
     },
 
     render() {
@@ -82,7 +80,11 @@ let DisciplinaListagem = React.createClass({
 
                             <div className="panel-body clearfix">
                                 <DataTable source={this.state.disciplinas}
-                                            columns={[ { name: 'id', title: '#' }, { name: 'nome', title: 'Nome' }]}/>
+                                            columns={[ {name: 'id', title: '#'},
+                                                        {name: 'nome', title: 'Nome'},
+                                                        {name: 'acoes', title: 'Ações', width: '100px', align: 'center', action: true} ]}
+                                            actions={[  {name: 'alterar', icon: 'glyphicon glyphicon-pencil', event: this.alterar},
+                                                        {name: 'excluir', icon: 'glyphicon glyphicon-trash', event: this.excluir} ]} />
                             </div>
 
                             <div className="panel-footer">
@@ -90,9 +92,7 @@ let DisciplinaListagem = React.createClass({
                                             pageSize={[3, 5, 10, 20, 30, 40, 50, 100]}
                                             totalCount={this.state.totalRegistros}
                                             onChangePage={this.paginar}
-                                            onChangePageSize={this.limitPagina}
-                                            initialItemsPerPage={3}>
-                                </Pagination>
+                                            initialItemsPerPage={this.state.itensPorPagina} />
                             </div>
                         </div>
                     </div>

@@ -4,7 +4,7 @@ import React from 'react';
 import { Link, History } from 'react-router';
 import DisciplinaAction from '../../actions/disciplina_action';
 import DisciplinaStore from '../../stores/disciplina_store';
-import AlertMessage from '../comuns/alert_message';
+import AlertMessage from '../comuns/alert';
 
 let DisciplinaNovo = React.createClass({
     mixins: [ History ],

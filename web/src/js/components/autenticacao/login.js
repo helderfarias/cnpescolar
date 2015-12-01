@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react';
-import AlertMessage from '../comuns/alert_message';
+import AlertMessage from '../comuns/alert';
 import { History } from 'react-router';
 import LoginAction from '../../actions/login_action';
 import LoginStore from '../../stores/login_store';
