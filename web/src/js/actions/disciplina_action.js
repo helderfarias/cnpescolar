@@ -8,7 +8,7 @@ let DisciplinaAction = {
     filtrarPor: function(filtro) {
         Dispatcher.dispatch({
             actionType: Eventos.Disciplina.LISTAR,
-            filtro: filtro
+            criterios: filtro
         });
     },
 

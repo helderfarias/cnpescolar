@@ -3,52 +3,68 @@ package middleware
 import "net/http"
 import "github.com/gin-gonic/gin"
 
-type ResponseBuild struct {
+type Response interface {
+	Ok(value string)
+	Created()
+	NoContent()
+	Status(code int) Entity
+	Header(headers Params) Header
+}
+
+type Header interface {
+	Status(code int) Entity
+}
+
+type Entity interface {
+	Entity(value interface{})
+}
+
+type responseBuild struct {
 	ctx *gin.Context
 }
 
-type EntityBuild struct {
+type entityBuild struct {
 	status int
-	build  *ResponseBuild
+	build  *responseBuild
 }
 
-type HeaderBuild struct {
-	build *ResponseBuild
+type headerBuild struct {
+	build *responseBuild
 }
 
 type Params map[string]string
 
-func Response(c *gin.Context) *ResponseBuild {
-	return &ResponseBuild{ctx: c}
+func NewResponse(c *gin.Context) Response {
+	return &responseBuild{ctx: c}
 }
 
-func (r *ResponseBuild) Ok(value string) {
+func (r *responseBuild) Ok(value string) {
 	r.ctx.Data(http.StatusOK, "application/json", []byte(value))
 }
 
-func (r *ResponseBuild) Created() {
+func (r *responseBuild) Created() {
 	r.ctx.JSON(http.StatusCreated, gin.H{})
 }
 
-func (r *ResponseBuild) NoContent() {
+func (r *responseBuild) NoContent() {
 	r.ctx.Writer.WriteHeader(http.StatusNoContent)
 }
 
-func (r *ResponseBuild) Status(code int) *EntityBuild {
-	return &EntityBuild{status: code, build: r}
+func (r *responseBuild) Status(code int) Entity {
+	return &entityBuild{status: code, build: r}
 }
 
-func (e *HeaderBuild) Status(code int) *EntityBuild {
-	return &EntityBuild{status: code, build: e.build}
-}
-
-func (r *ResponseBuild) Header(headers Params) *HeaderBuild {
+func (r *responseBuild) Header(headers Params) Header {
 	for key, value := range headers {
 		r.ctx.Writer.Header().Add(key, value)
 	}
-	return &HeaderBuild{build: r}
+	return &headerBuild{build: r}
 }
 
-func (e *EntityBuild) Entity(value interface{}) {
+func (e *headerBuild) Status(code int) Entity {
+	return &entityBuild{status: code, build: e.build}
+}
+
+func (e *entityBuild) Entity(value interface{}) {
 	e.build.ctx.JSON(e.status, value)
 }

@@ -9,16 +9,19 @@ import assign from 'object-assign';
 
 var _disciplinas = [];
 var _erros = [];
+var _total = 0;
 
-function consultar(cb) {
+function consultar(criterios, cb) {
     _erros = [];
 
     request.get(Config.Cadastro.api('/disciplinas'))
-           .end(function(err, res) {
+            .query({ pagina: criterios.pagina, limite: criterios.limite })
+            .end(function(err, res) {
                if (err) {
                    _erros.push(err);
                } else {
                    _disciplinas = res.body;
+                   _total = parseInt(res.headers['x-total-count']);
                }
 
                cb();
@@ -41,7 +44,6 @@ function salvar(disciplina, cb) {
                if (err) {
                    _erros.push(err);
                }
-
                cb();
            });
 }
@@ -50,6 +52,10 @@ let DisciplinaStore = assign({}, EventEmitter.prototype, {
 
     getDisciplinas() {
         return _disciplinas;
+    },
+
+    getTotalRegistro() {
+        return _total;
     },
 
     getErros() {
@@ -73,7 +79,7 @@ let DisciplinaStore = assign({}, EventEmitter.prototype, {
 Dispatcher.register(function(action) {
     switch (action.actionType) {
         case Eventos.Disciplina.LISTAR:
-            consultar(function() {
+            consultar(action.criterios, () => {
                 DisciplinaStore.emitChange();
             });
             break;

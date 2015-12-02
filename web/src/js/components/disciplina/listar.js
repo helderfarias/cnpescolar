@@ -14,7 +14,7 @@ let DisciplinaListagem = React.createClass({
     getInitialState() {
         return {
             itensPorPagina: 10,
-            totalRegistros: 0,
+            total:  DisciplinaStore.getTotalRegistro(),
             disciplinas: DisciplinaStore.getDisciplinas(),
         }
     },
@@ -32,23 +32,33 @@ let DisciplinaListagem = React.createClass({
     },
 
     onFilter() {
-        let filtro = {
-            nome: this.refs.nome.value.trim()
+        let criterios = {
+            nome: this.refs.nome.value.trim(),
+            pagina: 1,
+            limite: this.state.itensPorPagina
         };
 
-        DisciplinaAction.filtrarPor(filtro);
+        DisciplinaAction.filtrarPor(criterios);
         this.refs.nome.value = null;
         this.refs.filtro.close();
     },
 
     onChangeListener() {
-        this.setState({ disciplinas: DisciplinaStore.getDisciplinas() });
+        this.setState({
+            pagina: 1,
+            total:  DisciplinaStore.getTotalRegistro(),
+            limite: this.state.itensPorPagina,
+            disciplinas: DisciplinaStore.getDisciplinas()
+        });
     },
 
     paginar(e) {
-        var disciplinas = this.state.disciplinas.slice(e.from - 1, e.to);
-
-        this.setState({ totalRegistros: disciplinas.length, disciplinas: disciplinas });
+        this.setState({
+            pagina: e.page,
+            total:  DisciplinaStore.getTotalRegistro(),
+            limite: this.state.itensPorPagina,
+            disciplinas:  DisciplinaStore.getDisciplinas()
+        });
     },
 
     alterar(e) {
@@ -90,7 +100,7 @@ let DisciplinaListagem = React.createClass({
                             <div className="panel-footer">
                                 <Pagination position={'right'}
                                             pageSize={[3, 5, 10, 20, 30, 40, 50, 100]}
-                                            totalCount={this.state.totalRegistros}
+                                            totalCount={this.state.total}
                                             onChangePage={this.paginar}
                                             initialItemsPerPage={this.state.itensPorPagina} />
                             </div>

@@ -9,12 +9,10 @@ import (
 )
 
 type DisciplinaResource struct {
-	disciplinas []dominio.Disciplina
+	contextFactory middleware.ContextWrapperFactory
 }
 
 func (r *DisciplinaResource) register(router *gin.Engine) {
-	r.disciplinas = make([]dominio.Disciplina, 0)
-
 	grupo := router.Group("/ges/v1/api")
 
 	grupo.GET("/disciplinas", r.listarTodos)
@@ -22,16 +20,32 @@ func (r *DisciplinaResource) register(router *gin.Engine) {
 }
 
 func (r *DisciplinaResource) listarTodos(c *gin.Context) {
-	middleware.Response(c).Status(http.StatusOK).Entity(r.disciplinas)
+	contextWrapper := r.contextFactory.Create(c)
+
+	pagina := contextWrapper.GetParamAsInt("pagina")
+	limite := contextWrapper.GetParamAsInt("limite")
+
+	var disciplinas []dominio.Disciplina
+	disciplinas = append(disciplinas, dominio.Disciplina{Id: 1, Nome: "Matemática"})
+	disciplinas = append(disciplinas, dominio.Disciplina{Id: 1, Nome: "Matemática"})
+	disciplinas = append(disciplinas, dominio.Disciplina{Id: 1, Nome: "Matemática"})
+	disciplinas = append(disciplinas, dominio.Disciplina{Id: 1, Nome: "Matemática"})
+	disciplinas = append(disciplinas, dominio.Disciplina{Id: 1, Nome: "Matemática"})
+	disciplinas = append(disciplinas, dominio.Disciplina{Id: 1, Nome: "Matemática"})
+
+	contextWrapper.Response().
+		Header(contextWrapper.CalcularPaginas(pagina, limite, int64(len(disciplinas)))).
+		Status(http.StatusOK).
+		Entity(disciplinas)
 }
 
 func (r *DisciplinaResource) cadastrar(c *gin.Context) {
+	contextWrapper := r.contextFactory.Create(c)
+
 	var disciplina dominio.Disciplina
 	if !c.Bind(&disciplina) {
 		return
 	}
 
-	r.disciplinas = append(r.disciplinas, disciplina)
-
-	middleware.Response(c).Status(http.StatusOK).Entity(r.disciplinas)
+	contextWrapper.Response().Created()
 }
