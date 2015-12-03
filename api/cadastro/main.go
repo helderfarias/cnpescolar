@@ -19,18 +19,19 @@ func main() {
 	config := carregarConfiguracoes()
 
 	logger.Info("Estabelecendo conexão com banco de dados")
-	db := sqlx.MustOpen(config.Database.Dialect, config.Database.Datasource)
-	defer db.Close()
+	dbcon := sqlx.MustOpen(config.Database.Dialect, config.Database.Datasource)
+	defer dbcon.Close()
 
 	logger.Info("Criando pool de conexões: Min: %d, Max: %d", config.Database.Pool.Min, config.Database.Pool.Max)
-	db.Ping()
-	db.SetMaxIdleConns(config.Database.Pool.Min)
-	db.SetMaxOpenConns(config.Database.Pool.Max)
+	dbcon.Ping()
+	dbcon.SetMaxIdleConns(config.Database.Pool.Min)
+	dbcon.SetMaxOpenConns(config.Database.Pool.Max)
 
 	logger.Info("Registrando middlewares")
 	router := gin.Default()
 	router.Use(middleware.CrossOrigin())
 	router.Use(middleware.SecurityRest())
+	router.Use(middleware.DataBase(dbcon, config.Database.Showsql))
 
 	logger.Info("Registrando endpoints")
 	endpoint.RegisterEndpoints(router)

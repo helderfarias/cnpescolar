@@ -1,5 +1,10 @@
 # ges
 
+## Migrations
+```bash
+make migrate e=dev m=up
+```
+
 ## Setup Development
 ```bash
 # Atom Edit

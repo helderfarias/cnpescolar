@@ -5,7 +5,8 @@ import { Link, History } from 'react-router';
 import Modal from '../modal';
 import DisciplinaAction from '../../actions/disciplina_action';
 import DisciplinaStore from '../../stores/disciplina_store';
-import DataTable from '../comuns/datatable';
+import TableRow from '../comuns/table';
+import Button from '../comuns/button';
 import Pagination from '../comuns/pagination';
 
 let DisciplinaListagem = React.createClass({
@@ -63,15 +64,26 @@ let DisciplinaListagem = React.createClass({
 
     alterar(e) {
         console.log('alterar', e);
-        alert('Alterar: ' + e.value.id + ', ' + e.value.nome);
     },
 
     excluir(e) {
         console.log('excluir', e);
-        alert('Excluir: ' + e.value.id + ', ' + e.value.nome);
     },
 
     render() {
+        let rows = this.state.disciplinas.map((row, rowIndex) => {
+            return (
+                <TableRow key={rowIndex}>
+                    <td>{row.id}</td>
+                    <td>{row.nome}</td>
+                    <td className="col-xs-2 col-md-2 col-lg-1">
+                        <Button target={row} icon={'fa fa-pencil'} onClick={this.alterar} />
+                        <Button target={row} icon={'fa fa-trash'} onClick={this.excluir} />
+                    </td>
+                </TableRow>
+            );
+        });
+
         return (
             <div className="row">
                 <div className="col-lg-12">
@@ -89,12 +101,18 @@ let DisciplinaListagem = React.createClass({
                             </div>
 
                             <div className="panel-body clearfix">
-                                <DataTable source={this.state.disciplinas}
-                                            columns={[ {name: 'id', title: '#'},
-                                                        {name: 'nome', title: 'Nome'},
-                                                        {name: 'acoes', title: 'Ações', width: '100px', align: 'center', action: true} ]}
-                                            actions={[  {name: 'alterar', icon: 'glyphicon glyphicon-pencil', event: this.alterar},
-                                                        {name: 'excluir', icon: 'glyphicon glyphicon-trash', event: this.excluir} ]} />
+                                <div className="table-responsive">
+                                    <table className="table table-condensed table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Nome</th>
+                                                <th>Ações</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>{rows}</tbody>
+                                    </table>
+                                </div>
                             </div>
 
                             <div className="panel-footer">

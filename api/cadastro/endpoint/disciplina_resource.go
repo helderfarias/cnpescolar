@@ -20,21 +20,21 @@ func (r *DisciplinaResource) register(router *gin.Engine) {
 }
 
 func (r *DisciplinaResource) listarTodos(c *gin.Context) {
-	contextWrapper := r.contextFactory.Create(c)
+	context := r.contextFactory.Create(c)
 
-	pagina := contextWrapper.GetParamAsInt("pagina")
-	limite := contextWrapper.GetParamAsInt("limite")
+	pagina := context.GetParamAsInt("pagina")
+	limite := context.GetParamAsInt("limite")
 
 	var disciplinas []dominio.Disciplina
 	disciplinas = append(disciplinas, dominio.Disciplina{Id: 1, Nome: "Matemática"})
-	disciplinas = append(disciplinas, dominio.Disciplina{Id: 1, Nome: "Matemática"})
-	disciplinas = append(disciplinas, dominio.Disciplina{Id: 1, Nome: "Matemática"})
-	disciplinas = append(disciplinas, dominio.Disciplina{Id: 1, Nome: "Matemática"})
-	disciplinas = append(disciplinas, dominio.Disciplina{Id: 1, Nome: "Matemática"})
-	disciplinas = append(disciplinas, dominio.Disciplina{Id: 1, Nome: "Matemática"})
+	disciplinas = append(disciplinas, dominio.Disciplina{Id: 2, Nome: "Português"})
+	disciplinas = append(disciplinas, dominio.Disciplina{Id: 3, Nome: "Ciência"})
+	disciplinas = append(disciplinas, dominio.Disciplina{Id: 4, Nome: "Inglês"})
+	disciplinas = append(disciplinas, dominio.Disciplina{Id: 5, Nome: "Biologia"})
+	disciplinas = append(disciplinas, dominio.Disciplina{Id: 6, Nome: "Sociologia"})
 
-	contextWrapper.Response().
-		Header(contextWrapper.CalcularPaginas(pagina, limite, int64(len(disciplinas)))).
+	context.Response().
+		Header(context.CalcularPaginas(pagina, limite, int64(len(disciplinas)))).
 		Status(http.StatusOK).
 		Entity(disciplinas)
 }
