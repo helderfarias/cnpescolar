@@ -1,5 +1,4 @@
 database:
-    dialect: postgres
     datasource: user=ges password=ges00 dbname=ges host=localhost port=5432 sslmode=disable
     showsql: true
     pool:

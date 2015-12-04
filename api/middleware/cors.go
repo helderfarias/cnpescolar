@@ -16,7 +16,7 @@ func CrossOrigin() gin.HandlerFunc {
 			c.Writer.Header().Add("Access-Control-Expose-Headers", "x-total-count, x-limit-count")
 			c.Next()
 			return
-		}
+		}		
 
 		c.Writer.Header().Add("Access-Control-Allow-Origin", "*")
 		c.Writer.Header().Add("Access-Control-Allow-Headers", "content-type, authorization, accept")

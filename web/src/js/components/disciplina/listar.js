@@ -22,6 +22,7 @@ let DisciplinaListagem = React.createClass({
 
     componentDidMount() {
         DisciplinaStore.addChangeListener(this.onChangeListener);
+        DisciplinaAction.filtrarPor({ pagina: 1, limite: this.state.itensPorPagina });
     },
 
     componentWillUnmount() {

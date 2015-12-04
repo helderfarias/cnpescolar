@@ -2,7 +2,7 @@ package endpoint
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/helderfarias/ges/api/cadastro/middleware"
+	"github.com/helderfarias/ges/api/middleware"
 )
 
 type Resource interface {

@@ -1,11 +1,9 @@
 package middleware
 
-import (
-	"strconv"
-
-	"github.com/gin-gonic/gin"
-	"github.com/helderfarias/ges/api/cadastro/util"
-)
+import "github.com/gin-gonic/gin"
+import "github.com/helderfarias/ges/api/util"
+import "strconv"
+import "github.com/helderfarias/ges/api/service"
 
 type ContextWrapperFactory interface {
 	Create(context *gin.Context) ContextWrapper
@@ -15,7 +13,8 @@ type ContextWrapper interface {
 	Response() Response
 	GetParam(name string) string
 	GetParamAsInt(name string) int
-	CalcularPaginas(pagina int, limite int, total int64) Params
+	Paginate(pagina int, limite int, total int64) Params
+	GetServiceFactory() service.ServiceFactory
 }
 
 type contextWrapper struct {
@@ -58,7 +57,11 @@ func (c *contextWrapper) GetParamAsInt(name string) int {
 	return util.ToInteger(value)
 }
 
-func (c *contextWrapper) CalcularPaginas(pagina int, limite int, total int64) Params {
+func (c *contextWrapper) GetServiceFactory() service.ServiceFactory {
+	return c.context.MustGet("serviceFactory").(service.ServiceFactory)
+}
+
+func (c *contextWrapper) Paginate(pagina int, limite int, total int64) Params {
 	if limite <= 0 {
 		return Params{}
 	}
