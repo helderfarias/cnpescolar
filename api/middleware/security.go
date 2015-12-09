@@ -1,12 +1,10 @@
 package middleware
 
-import (
-	"fmt"
-	"github.com/gin-gonic/gin"
-	"log"
-	"net/http"
-	"strings"
-)
+import "fmt"
+import "github.com/gin-gonic/gin"
+import "log"
+import "net/http"
+import "strings"
 
 const (
 	stsHeader           = "Strict-Transport-Security"

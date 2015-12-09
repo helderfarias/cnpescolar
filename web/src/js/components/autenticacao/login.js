@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react';
-import AlertMessage from '../comuns/alert';
+import Growl from '../comuns/alert';
 import { History } from 'react-router';
 import LoginAction from '../../actions/login_action';
 import LoginStore from '../../stores/login_store';
@@ -36,11 +36,7 @@ let Login = React.createClass({
             return
         }
 
-        this.setState({ erros: LoginStore.getErros() });
-    },
-
-    onAlertClose() {
-        this.setState({ erros: [] });
+        Growl.notifyOnErrors(LoginStore.getErros());
     },
 
     render() {
@@ -53,8 +49,6 @@ let Login = React.createClass({
                         </div>
 
                         <div className="panel-body">
-                            <AlertMessage source={this.state.erros} severity='danger' onClose={this.onAlertClose}/>
-
                             <form role="form" onSubmit={this.handleSubmit}>
                                 <fieldset>
                                     <div className={this.state.error ? 'form-group has-error' : 'form-group'}>

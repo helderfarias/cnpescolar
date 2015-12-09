@@ -14,19 +14,20 @@ function autenticar(credencias, cb) {
     _erros = [];
 
     if (!credencias || !credencias.login || !credencias.senha) {
-        _erros = [ { texto: 'Credências inválida' }];
+        _erros = [ { text: 'Credências inválida' }];
         return cb();
     }
 
-    request.post(Config.Seguranca.auth('/token'))
+    request.post(Config.Seguranca.api('/token'))
            .send({ username: credencias.login, password: credencias.senha })
            .set('Accept', 'application/json')
            .set('Authorization', montarHashClientCredencials())
-           .end(function(err, res){
-               if (!err) {
-                   localStorage.setItem('gestoken', res.text);
-               }
-               cb();
+           .end(function(err, res) {
+                if (!err) {
+                    localStorage.setItem('gestoken', res.text);
+                }
+
+                cb();
            });
 }
 
