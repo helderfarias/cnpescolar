@@ -23,6 +23,8 @@ func (q *condition) And(expr Expression) Operator {
 }
 
 func (c *condition) IsTrue(value bool, expr Expression) {
-	item := clausule{op: c.And(expr), values: expr.Values()}
-	c.clausules = append(c.clausules, item)
+	if value {
+		item := clausule{op: c.And(expr), values: expr.Values()}
+		c.clausules = append(c.clausules, item)
+	}
 }

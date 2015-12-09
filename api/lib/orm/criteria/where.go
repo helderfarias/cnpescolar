@@ -2,15 +2,16 @@ package criteria
 
 import "bytes"
 
-type WhereBuilder struct {
-	toSQL(index Param) string 
+type WhereBuilder interface {
+	ToSQL(index Param) string
+	Values() map[string]interface{}
 }
 
 type whereBuilder struct {
 	clausules []clausule
 }
 
-func (w *whereBuilder) toSQL(index Param) string {
+func (w *whereBuilder) ToSQL(index Param) string {
 	var buffer bytes.Buffer
 
 	buffer.WriteString("\r\n")
@@ -21,4 +22,16 @@ func (w *whereBuilder) toSQL(index Param) string {
 	}
 
 	return buffer.String()
+}
+
+func (w *whereBuilder) Values() map[string]interface{} {
+	params := make(map[string]interface{})
+
+	for _, c := range w.clausules {
+		for idx, v := range c.values {
+			params[":p_w_"+string(idx)] = v
+		}
+	}
+
+	return params
 }

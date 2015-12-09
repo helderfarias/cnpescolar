@@ -32,7 +32,6 @@ func main() {
 	router.Use(middleware.CrossOrigin())
 	router.Use(middleware.SecurityRest())
 	router.Use(middleware.DataBase(db, config.Database.Showsql))
-	router.Use(middleware.ServiceFactory())
 
 	logger.Info("Registrando endpoints")
 	endpoint.RegisterEndpoints(router)
