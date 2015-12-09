@@ -5,6 +5,7 @@ import "github.com/gin-gonic/gin"
 
 type Response interface {
 	Ok(value string)
+	Error(status int, value string)
 	Created()
 	NoContent()
 	Status(code int) Entity
@@ -36,6 +37,10 @@ type Params map[string]string
 
 func NewResponse(c *gin.Context) Response {
 	return &responseBuild{ctx: c}
+}
+
+func (r *responseBuild) Error(status int, value string) {
+	r.ctx.Data(status, "application/json", []byte(value))
 }
 
 func (r *responseBuild) Ok(value string) {

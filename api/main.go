@@ -14,6 +14,7 @@ import "gopkg.in/yaml.v2"
 func main() {
 	logger.Info("Lendo configurações de sistema")
 	config := carregarConfiguracoes()
+	certs := carregarCertificado(config)
 
 	logger.Info("Estabelecendo conexão com banco de dados")
 	db, err := sql.Open("postgres", config.Database.Datasource)
@@ -31,6 +32,7 @@ func main() {
 	router := gin.Default()
 	router.Use(middleware.CrossOrigin())
 	router.Use(middleware.SecurityRest())
+	router.Use(middleware.CertifiedConfig(certs))
 	router.Use(middleware.DataBase(db, config.Database.Showsql))
 	router.Use(middleware.ServiceFactory())
 
@@ -54,4 +56,23 @@ func carregarConfiguracoes() *util.ResourceConfig {
 	}
 
 	return &cfg
+}
+
+func carregarCertificado(config *util.ResourceConfig) *util.Certified {
+	fileNamePrivateKey := util.GetOpt("CONFIG_PRIVATE_KEY_FILE", config.Certs.Private)
+	fileNamePublicKey := util.GetOpt("CONFIG_PUBLIC_KEY_FILE", config.Certs.Public)
+
+	logger.Info("Carregando certificados digitais")
+
+	privateKey, err := ioutil.ReadFile(fileNamePrivateKey)
+	if err != nil {
+		log.Panicln(err)
+	}
+
+	publicKey, err := ioutil.ReadFile(fileNamePublicKey)
+	if err != nil {
+		log.Panicln(err)
+	}
+
+	return &util.Certified{PrivateKey: privateKey, PublicKey: publicKey}
 }

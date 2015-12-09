@@ -4,7 +4,7 @@ import React from 'react';
 import { Link, History } from 'react-router';
 import DisciplinaAction from '../../actions/disciplina_action';
 import DisciplinaStore from '../../stores/disciplina_store';
-import AlertMessage from '../comuns/alert';
+import Growl from '../comuns/alert';
 
 let DisciplinaNovo = React.createClass({
     mixins: [ History ],
@@ -37,13 +37,9 @@ let DisciplinaNovo = React.createClass({
             return;
         }
 
-        this.setState({ erros: DisciplinaStore.getErros() });
+        Growl.notifyOnErrors(DisciplinaStore.getErros());
     },
-
-    onAlertClose() {
-        this.setState({ erros: [] });
-    },
-
+   
     render() {
         return (
             <div>
@@ -54,8 +50,6 @@ let DisciplinaNovo = React.createClass({
                 </div>
 
                 <div className="row">
-                    <AlertMessage source={this.state.erros} severity='danger' onClose={this.onAlertClose}/>
-
                    <div className="col-lg-12">
                        <div className="panel panel-default">
                            <div className="panel-heading">

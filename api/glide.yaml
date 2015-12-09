@@ -5,3 +5,5 @@ import:
     - package: github.com/lib/pq
     - package: github.com/go-gorp/gorp
       version: ^v1.7.1
+    - package: github.com/helderfarias/oauthprovider-go
+    - package: github.com/dgrijalva/jwt-go

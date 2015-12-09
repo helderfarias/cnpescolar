@@ -1,8 +1,6 @@
 package util
 
-import (
-	"os"
-)
+import "os"
 
 func GetOpt(name, def string) string {
 	if env := os.Getenv(name); env != "" {

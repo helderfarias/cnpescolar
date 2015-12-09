@@ -1,10 +1,8 @@
 package endpoint
 
-import (
-	"github.com/gin-gonic/gin"
-	"github.com/stretchr/testify/suite"
-	"testing"
-)
+import "github.com/gin-gonic/gin"
+import "github.com/stretchr/testify/suite"
+import "testing"
 
 func init() {
 	gin.SetMode(gin.TestMode)

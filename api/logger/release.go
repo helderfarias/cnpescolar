@@ -2,9 +2,7 @@
 
 package logger
 
-import (
-	"log"
-)
+import "log"
 
 func Debug(fmt string, args ...interface{}) {
 }

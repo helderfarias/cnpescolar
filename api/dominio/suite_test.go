@@ -1,9 +1,7 @@
 package dominio
 
-import (
-	"github.com/stretchr/testify/suite"
-	"testing"
-)
+import "github.com/stretchr/testify/suite"
+import "testing"
 
 type DominioSuite struct {
 	suite.Suite

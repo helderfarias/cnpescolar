@@ -9,4 +9,8 @@ type ResourceConfig struct {
 			Max int
 		}
 	}
+	Certs struct {
+		Private string
+		Public  string
+	}
 }

@@ -2,11 +2,8 @@
 
 let ApiConfig = {
     Seguranca: {
-        auth: function(resource) {
-            return 'http://localhost:4001/ges/v1/auth' + resource;
-        },
         api: function(resource) {
-            return 'http://localhost:4001/ges/v1/api' + resource;
+            return 'http://localhost:4000/ges/v1/api' + resource;
         }
     },
     Cadastro: {

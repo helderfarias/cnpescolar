@@ -5,6 +5,12 @@
 make migrate e=dev m=up
 ```
 
+## Certs
+```bash
+openssl ecparam -genkey -name secp521r1 -noout -out ges_pvt.pem 
+openssl ec -in ges_pvt.pem -pubout -out ges_pub.pem
+```
+
 ## Setup Development
 ```bash
 # Atom Edit
