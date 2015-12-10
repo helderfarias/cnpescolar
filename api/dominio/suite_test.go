@@ -10,6 +10,6 @@ type DominioSuite struct {
 func (s *DominioSuite) SetupTest() {
 }
 
-func TestEndpointAllTests(t *testing.T) {
+func TestDominioAllTests(t *testing.T) {
 	suite.Run(t, new(DominioSuite))
 }

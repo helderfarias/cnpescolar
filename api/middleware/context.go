@@ -85,6 +85,7 @@ func (c *contextWrapper) prepareParams() {
 
 func (c *contextWrapperFactory) createServiceFactory(context *gin.Context) service.ServiceFactory {
 	var em orm.EntityManager
+	var certs *util.Certified
 
 	if tx, ok := context.Get("tx"); ok && tx != nil {
 		em = orm.NewEntityManagerWithTransaction(tx.(*gorp.Transaction))
@@ -93,5 +94,7 @@ func (c *contextWrapperFactory) createServiceFactory(context *gin.Context) servi
 		em = orm.NewEntityManager(db)
 	}
 
-	return service.NewServiceFactory(em)
+	certs = context.MustGet("certs").(*util.Certified)
+
+	return service.NewServiceFactory(em, certs)
 }

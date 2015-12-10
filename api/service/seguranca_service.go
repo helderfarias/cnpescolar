@@ -2,56 +2,57 @@ package service
 
 import "github.com/helderfarias/ges/api/dominio"
 import "github.com/helderfarias/ges/api/dao"
-
-// import "github.com/helderfarias/ges/api/logger"
+import "github.com/helderfarias/ges/api/util"
+import "github.com/helderfarias/ges/api/logger"
+import "github.com/helderfarias/ges/api/constants"
 import "github.com/helderfarias/ges/api/lib/orm"
-
-// import "github.com/dgrijalva/jwt-go"
-
-// import "crypto/ecdsa"
-// import "errors"
+import "github.com/dgrijalva/jwt-go"
+import "crypto/ecdsa"
+import "errors"
 
 type SegurancaService interface {
 	Autenticar(login, senha string) (*dominio.Token, error)
 }
 
 type segurancaService struct {
-	dao dao.SegurancaDAO
+	dao  dao.SegurancaDAO
+	cert *util.Certified
 }
 
-func NewSegurancaService(em orm.EntityManager) SegurancaService {
+func NewSegurancaService(em orm.EntityManager, certs *util.Certified) SegurancaService {
 	return &segurancaService{
-		dao: dao.NewSegurancaDAO(em),
+		dao:  dao.NewSegurancaDAO(em),
+		cert: certs,
 	}
 }
 
 func (d *segurancaService) Autenticar(login, senha string) (*dominio.Token, error) {
-	// if login == "" || senha == "" {
-	// 	return nil, errors.New("Credências não informada")
-	// }
+	if login == "" || senha == "" {
+		return nil, errors.New("Credências não informada")
+	}
 
-	// usuario, _ := d.dao.Existe(login, senha)
-	// if usuario == nil {
-	// 	return nil, errors.New("Credências inválida")
-	// }
+	usuario, err := d.dao.Existe(login, senha)
+	if usuario == nil {
+		logger.Error("Erro ao tentar buscar usuario para autênticação - %s", err)
+		return nil, errors.New("Credências inválida")
+	}
 
-	// var err error
-	// var ecdsaKey *ecdsa.PrivateKey
-	// if ecdsaKey, err = jwt.ParseECPrivateKeyFromPEM(s.gateway.GetPrivateKey()); err != nil {
-	// 	logger.Error("Erro ao tentar efetuar parser chave private", err)
-	// 	return nil, errors.New("Não foi possível validar token")
-	// }
+	var ecdsaKey *ecdsa.PrivateKey
+	if ecdsaKey, err = jwt.ParseECPrivateKeyFromPEM(d.cert.PrivateKey); err != nil {
+		logger.Error("Erro ao tentar efetuar parser chave private - %s", err)
+		return nil, errors.New("Não foi possível validar token")
+	}
 
-	// signMethod := jwt.New(jwt.SigningMethodES512)
-	// signMethod.Claims["login"] = usuario.CpfCnpj
-	// signMethod.Claims["roles"] = dominio.ROLES_EASYMOBILE
+	signMethod := jwt.New(jwt.SigningMethodES512)
+	signMethod.Claims["login"] = login
+	signMethod.Claims["roles"] = constants.ROLE_PERMISSAO_ACESSO_SISTEMA
 
-	// var token string
-	// token, err = signMethod.SignedString(ecdsaKey)
-	// if err != nil {
-	// 	logger.Error("Erro ao tentar assinar token", err)
-	// 	return nil, errors.New("Token inválido")
-	// }
+	var token string
+	token, err = signMethod.SignedString(ecdsaKey)
+	if err != nil {
+		logger.Error("Erro ao tentar assinar token - %s", err)
+		return nil, errors.New("Token inválido")
+	}
 
-	return &dominio.Token{}, nil
+	return &dominio.Token{token}, err
 }

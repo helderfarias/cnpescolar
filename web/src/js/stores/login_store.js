@@ -21,6 +21,7 @@ function autenticar(credencias, cb) {
     request.post(Config.Seguranca.api('/token'))
            .send({ username: credencias.login, password: credencias.senha })
            .set('Accept', 'application/json')
+           .set('Content-Type', 'application/x-www-form-urlencoded')
            .set('Authorization', montarHashClientCredencials())
            .end(function(err, res) {
                 if (!err) {

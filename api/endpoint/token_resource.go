@@ -17,9 +17,7 @@ func (r *TokenResource) register(router *gin.Engine) {
 
 func (r *TokenResource) emitirToken(c *gin.Context) {
 	context := r.contextFactory.Create(c)
-
 	service := context.GetServiceFactory().GetSegurancaService()
-
 	request := oauthhttp.OAuthRequest{HttpRequest: c.Request}
 
 	token, err := service.Autenticar(request.GetUserName(), request.GetPassword())

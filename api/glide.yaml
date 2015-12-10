@@ -1,9 +1,12 @@
 package: main
 
 import:
+    - package: github.com/gin-gonic/gin
+      version: ^v1.0rc1
     - package: gopkg.in/yaml.v2
     - package: github.com/lib/pq
     - package: github.com/go-gorp/gorp
       version: ^v1.7.1
     - package: github.com/helderfarias/oauthprovider-go
     - package: github.com/dgrijalva/jwt-go
+    - package: golang.org/x/text

@@ -2,6 +2,7 @@ package service
 
 import "github.com/helderfarias/ges/api/dao"
 import "github.com/helderfarias/ges/api/lib/orm"
+import "github.com/helderfarias/ges/api/util"
 
 type ServiceFactory interface {
 	GetDisciplinaService() DisciplinaService
@@ -13,7 +14,7 @@ type serviceFactory struct {
 	segurancaService  SegurancaService
 }
 
-func NewServiceFactory(em orm.EntityManager) ServiceFactory {
+func NewServiceFactory(em orm.EntityManager, certs *util.Certified) ServiceFactory {
 	factory := &serviceFactory{}
 
 	factory.disciplinaService = &disciplinaService{
@@ -21,7 +22,8 @@ func NewServiceFactory(em orm.EntityManager) ServiceFactory {
 	}
 
 	factory.segurancaService = &segurancaService{
-		dao: dao.NewSegurancaDAO(em),
+		dao:  dao.NewSegurancaDAO(em),
+		cert: certs,
 	}
 
 	return factory
