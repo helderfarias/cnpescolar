@@ -15,6 +15,7 @@ function consultar(criterios, cb) {
     _erros = [];
 
     request.get(Config.Cadastro.api('/disciplinas'))
+            .query({ nome: criterios.nome })
             .query({ pagina: criterios.pagina, limite: criterios.limite })
             .end(function(err, res) {
                if (err) {

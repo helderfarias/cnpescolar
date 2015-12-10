@@ -24,9 +24,12 @@ func (r *DisciplinaResource) obterTodas(c *gin.Context) {
 	service := context.GetServiceFactory().GetDisciplinaService()
 
 	criterios := criterio.CriterioDisciplina{
+		Nome:   context.GetParam("nome"),
 		Pagina: context.GetParamAsInt("pagina"),
 		Limite: context.GetParamAsInt("limite"),
 	}
+
+	log.Println(criterios)
 
 	disciplinas, err := service.Consultar(&criterios)
 	if err != nil {

@@ -2,6 +2,7 @@ package criteria
 
 import "github.com/helderfarias/ges/api/lib/orm"
 import "bytes"
+import "log"
 
 type SelectBuilder interface {
 	Where(args WhereArgs)
@@ -22,7 +23,7 @@ type WhereArgs func(Condition)
 
 func (s *selectBuilder) Where(args WhereArgs) {
 	items := &condition{}
-	items.clausules = make([]clausule, 0)
+	items.clausules = make([]Operator, 0)
 	args(items)
 	s.where = &whereBuilder{clausules: items.clausules}
 }
@@ -37,6 +38,8 @@ func (s *selectBuilder) OrderBy(o OrderBy) {
 
 func (s *selectBuilder) GetResultList(list interface{}) error {
 	sql, params := s.build()
+
+	log.Println(sql, params)
 
 	return s.em.Select(list, sql, params)
 }
@@ -59,7 +62,7 @@ func (s *selectBuilder) build() (string, map[string]interface{}) {
 	}
 
 	if s.order != nil {
-		buffer.WriteString("\n\r")
+		buffer.WriteString("\n\r\t")
 		buffer.WriteString("ORDER BY ")
 		buffer.WriteString(s.order.ToSQL())
 	}
@@ -68,9 +71,9 @@ func (s *selectBuilder) build() (string, map[string]interface{}) {
 		buffer.WriteString("\n\r")
 		buffer.WriteString(s.page.ToSQL(index))
 
-		offset, limit := s.page.Value()
-		params[":p_p_1"] = offset
-		params[":p_p_2"] = limit
+		for k, v := range s.page.Values() {
+			params[k] = v
+		}
 	}
 
 	return buffer.String(), params

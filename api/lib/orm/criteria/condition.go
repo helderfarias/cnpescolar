@@ -2,29 +2,21 @@ package criteria
 
 type Condition interface {
 	IsTrue(value bool, expr Expression)
-	Equals(column string, value interface{}) Expression
+	IsFalse(value bool, expr Expression)
 }
 
 type condition struct {
-	clausules []clausule
-}
-
-type clausule struct {
-	op     Operator
-	values []interface{}
-}
-
-func (c *condition) Equals(column string, value interface{}) Expression {
-	return &equalsExpr{column: column, value: value}
-}
-
-func (q *condition) And(expr Expression) Operator {
-	return &andOperador{expr: expr}
+	clausules []Operator
 }
 
 func (c *condition) IsTrue(value bool, expr Expression) {
 	if value {
-		item := clausule{op: c.And(expr), values: expr.Values()}
-		c.clausules = append(c.clausules, item)
+		c.clausules = append(c.clausules, And(expr))
+	}
+}
+
+func (c *condition) IsFalse(value bool, expr Expression) {
+	if !value {
+		c.clausules = append(c.clausules, And(expr))
 	}
 }

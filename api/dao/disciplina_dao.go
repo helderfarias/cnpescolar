@@ -25,11 +25,14 @@ func (d *disciplinaDAO) Salvar(disciplina *dominio.Disciplina) error {
 func (d *disciplinaDAO) Filtrar(criterios *criterio.CriterioDisciplina) ([]dominio.Disciplina, error) {
 	var disciplinas []dominio.Disciplina
 
-	sql := criteria.NewQuery(d.em).Select("select * from disciplinas")
-	sql.Pagination(int64(criterios.Pagina), int64(criterios.Limite))
-	sql.OrderBy(criteria.Asc("id"))
+	query := criteria.NewQuery(d.em)
+	query.Select("SELECT * FROM disciplinas")
+	query.Where(func(args criteria.Condition) {
+		args.IsTrue(true, criteria.Translate("nome", criterios.Nome))
+	})
+	query.OrderBy(criteria.Asc("id"))
 
-	err := sql.GetResultList(&disciplinas)
+	err := query.GetResultList(&disciplinas)
 
 	return disciplinas, err
 }

@@ -7,6 +7,6 @@ func (e *entityManagerMock) Insert(entity interface{}) error {
 	return nil
 }
 
-func (e *entityManagerMock) Select(entity interface{}, sql string) error {
+func (e *entityManagerMock) Select(entity interface{}, sql string, params map[string]interface{}) error {
 	return nil
 }

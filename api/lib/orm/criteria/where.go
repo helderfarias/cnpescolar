@@ -8,7 +8,7 @@ type WhereBuilder interface {
 }
 
 type whereBuilder struct {
-	clausules []clausule
+	clausules []Operator
 }
 
 func (w *whereBuilder) ToSQL(index Param) string {
@@ -18,7 +18,7 @@ func (w *whereBuilder) ToSQL(index Param) string {
 	buffer.WriteString("\tWHERE 1 = 1")
 
 	for _, c := range w.clausules {
-		buffer.WriteString("\r\n" + c.op.ToSQL(index))
+		buffer.WriteString("\r\n" + c.ToSQL(index))
 	}
 
 	return buffer.String()
@@ -28,8 +28,8 @@ func (w *whereBuilder) Values() map[string]interface{} {
 	params := make(map[string]interface{})
 
 	for _, c := range w.clausules {
-		for idx, v := range c.values {
-			params[":p_w_"+string(idx)] = v
+		for k, v := range c.Values() {
+			params[k] = v
 		}
 	}
 

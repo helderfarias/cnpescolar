@@ -15,17 +15,18 @@ func (t *CriteriaSuite) TestDeveriaConstruirClausulaSelect() {
 func (t *CriteriaSuite) TestDeveriaCriarCriterioCompleto() {
 	em := &entityManagerMock{}
 
-	criteria := NewQuery(em)
+	query := NewQuery(em)
 
 	var list []interface{}
 
-	sql := criteria.Select("select * from dual")
-	sql.Where(func(args Condition) {
-		args.IsTrue(true, args.Equals("id", 1))
-		args.IsTrue(false, args.Equals("nome", "teste"))
+	query.Select("select * from dual")
+	query.Where(func(args Condition) {
+		args.IsTrue(true, Equals("id", 1))
+		args.IsFalse(false, Equals("nome", "teste"))
 	})
-	sql.OrderBy(Asc("id"))
-	sql.GetResultList(&list)
+	query.Pagination(1, 2)
+	query.OrderBy(Asc("id"))
+	query.GetResultList(&list)
 
-	t.NotNil(criteria)
+	t.NotNil(query)
 }
