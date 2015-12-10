@@ -29,15 +29,13 @@ func (r *DisciplinaResource) obterTodas(c *gin.Context) {
 		Limite: context.GetParamAsInt("limite"),
 	}
 
-	log.Println(criterios)
-
-	disciplinas, err := service.Consultar(&criterios)
+	disciplinas, total, err := service.Consultar(&criterios)
 	if err != nil {
 		log.Println(err)
 	}
 
 	context.Response().
-		Header(context.Paginate(criterios.Pagina, criterios.Limite, int64(len(disciplinas)))).
+		Header(context.Paginate(criterios.Pagina, criterios.Limite, total)).
 		Status(http.StatusOK).
 		Entity(disciplinas)
 }

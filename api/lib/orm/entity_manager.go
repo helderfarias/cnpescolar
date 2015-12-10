@@ -45,9 +45,9 @@ func (e *entityManager) Get(entity interface{}, sql string, args map[string]inte
 	var err error
 
 	if e.tx != nil {
-		err = e.tx.SelectOne(&entity, sql, args)
+		err = e.tx.SelectOne(entity, sql, args)
 	} else {
-		err = e.db.SelectOne(&entity, sql, args)
+		err = e.db.SelectOne(entity, sql, args)
 	}
 
 	return err

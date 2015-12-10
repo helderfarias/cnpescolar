@@ -6,7 +6,7 @@ import "github.com/helderfarias/ges/api/dao"
 import "github.com/helderfarias/ges/api/lib/orm"
 
 type DisciplinaService interface {
-	Consultar(criterio *criterio.CriterioDisciplina) ([]dominio.Disciplina, error)
+	Consultar(criterio *criterio.CriterioDisciplina) ([]dominio.Disciplina, int64, error)
 	Cadastrar(disciplina *dominio.Disciplina) error
 }
 
@@ -20,7 +20,7 @@ func NewDisciplinaService(em orm.EntityManager) DisciplinaService {
 	}
 }
 
-func (d *disciplinaService) Consultar(criterio *criterio.CriterioDisciplina) ([]dominio.Disciplina, error) {
+func (d *disciplinaService) Consultar(criterio *criterio.CriterioDisciplina) ([]dominio.Disciplina, int64, error) {
 	return d.dao.Filtrar(criterio)
 }
 

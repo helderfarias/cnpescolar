@@ -46,7 +46,7 @@ func (c *contextWrapper) Response() Response {
 }
 
 func (c *contextWrapper) GetParam(name string) string {
-	c.prepareParams()
+	c.doParseForm()
 
 	return c.context.Request.Form.Get(name)
 }
@@ -76,7 +76,7 @@ func (c *contextWrapper) Paginate(pagina int, limite int, total int64) Params {
 	}
 }
 
-func (c *contextWrapper) prepareParams() {
+func (c *contextWrapper) doParseForm() {
 	if !c.parserForm {
 		c.context.Request.ParseForm()
 		c.parserForm = true

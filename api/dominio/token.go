@@ -10,9 +10,9 @@ type Token struct {
 }
 
 type payload struct {
+	Nome  string `json:"nome"`
 	Login string `json:"login"`
 	Roles string `json:"roles"`
-	Name  string `json:"name"`
 }
 
 func (t *Token) GetUsuario() *Usuario {
@@ -32,8 +32,8 @@ func (t *Token) GetUsuario() *Usuario {
 	}
 
 	return &Usuario{
-		ID:         pd.Login,
-		Nome:       pd.Name,
+		Login:      pd.Login,
+		Nome:       pd.Nome,
 		Permissoes: strings.Split(pd.Roles, ","),
 	}
 }

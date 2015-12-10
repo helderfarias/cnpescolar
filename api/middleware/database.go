@@ -8,7 +8,13 @@ import "github.com/helderfarias/ges/api/dominio"
 func DataBase(db *sql.DB, debug bool) gin.HandlerFunc {
 	dbmap := &gorp.DbMap{Db: db, Dialect: gorp.PostgresDialect{}}
 
-	dbmap.AddTableWithName(dominio.Disciplina{}, "disciplinas").SetKeys(true, "Id")
+	dominio.RegisterDomains(func(entity interface{}, tableName string, setKeys bool) {
+		if setKeys {
+			dbmap.AddTableWithName(entity, tableName).SetKeys(true, "Id")
+		} else {
+			dbmap.AddTableWithName(entity, tableName)
+		}
+	})
 
 	return func(c *gin.Context) {
 		c.Set("databaseConnection", dbmap)

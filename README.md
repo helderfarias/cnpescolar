@@ -1,5 +1,8 @@
 # ges
 
+## Adição de entidades gerenciada
+* Registrar em domain/register.go
+
 ## Migrations
 ```bash
 make migrate e=dev m=up

@@ -22,7 +22,7 @@ func NewServiceFactory(em orm.EntityManager, certs *util.Certified) ServiceFacto
 	}
 
 	factory.segurancaService = &segurancaService{
-		dao:  dao.NewSegurancaDAO(em),
+		dao:  dao.NewUsuarioDAO(em),
 		cert: certs,
 	}
 

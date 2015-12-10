@@ -15,13 +15,13 @@ type SegurancaService interface {
 }
 
 type segurancaService struct {
-	dao  dao.SegurancaDAO
+	dao  dao.UsuarioDAO
 	cert *util.Certified
 }
 
 func NewSegurancaService(em orm.EntityManager, certs *util.Certified) SegurancaService {
 	return &segurancaService{
-		dao:  dao.NewSegurancaDAO(em),
+		dao:  dao.NewUsuarioDAO(em),
 		cert: certs,
 	}
 }

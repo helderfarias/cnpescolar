@@ -46,20 +46,21 @@ let DisciplinaListagem = React.createClass({
 
     onChangeListener() {
         this.setState({
-            pagina: 1,
+            pagina: this.state.pagina,
             total:  DisciplinaStore.getTotalRegistro(),
-            limite: this.state.itensPorPagina,
+            itensPorPagina: this.state.itensPorPagina,
             disciplinas: DisciplinaStore.getDisciplinas()
         });
     },
 
     paginar(e) {
-        this.setState({
+        let criterios = {
+            nome: this.refs.nome.value.trim(),
             pagina: e.page,
-            total:  DisciplinaStore.getTotalRegistro(),
-            limite: this.state.itensPorPagina,
-            disciplinas:  DisciplinaStore.getDisciplinas()
-        });
+            limite: e.limit
+        };
+
+        DisciplinaAction.filtrarPor(criterios);
     },
 
     alterar(e) {

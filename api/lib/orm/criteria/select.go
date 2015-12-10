@@ -9,6 +9,7 @@ type SelectBuilder interface {
 	OrderBy(o OrderBy)
 	Pagination(offset int64, limit int64)
 	GetResultList(list interface{}) error
+	GetSingleResult(entity interface{}) error
 }
 
 type selectBuilder struct {
@@ -29,7 +30,18 @@ func (s *selectBuilder) Where(args WhereArgs) {
 }
 
 func (s *selectBuilder) Pagination(offset int64, limit int64) {
-	s.page = &pageBuilder{offset: offset, limit: limit}
+	from := offset
+	to := limit
+
+	if offset <= 0 {
+		from = 1
+	}
+
+	if limit <= 0 {
+		to = 10
+	}
+
+	s.page = &pageBuilder{offset: ((from - 1) * to), limit: to}
 }
 
 func (s *selectBuilder) OrderBy(o OrderBy) {
@@ -42,6 +54,14 @@ func (s *selectBuilder) GetResultList(list interface{}) error {
 	log.Println(sql, params)
 
 	return s.em.Select(list, sql, params)
+}
+
+func (s *selectBuilder) GetSingleResult(entity interface{}) error {
+	sql, params := s.build()
+
+	log.Println(sql, params)
+
+	return s.em.Get(entity, sql, params)
 }
 
 func (s *selectBuilder) build() (string, map[string]interface{}) {
