@@ -4,13 +4,17 @@ import "github.com/go-gorp/gorp"
 
 type EntityManager interface {
 	Insert(entity interface{}) error
+	Update(entity interface{}) error
 	Select(entity interface{}, sql string, args map[string]interface{}) error
 	Get(entity interface{}, sql string, args map[string]interface{}) error
+	SetDebug(value bool)
+	IsDebug() bool
 }
 
 type entityManager struct {
 	db *gorp.DbMap
 	tx *gorp.Transaction
+	debug bool
 }
 
 func NewEntityManager(dbmap *gorp.DbMap) EntityManager {
@@ -19,6 +23,18 @@ func NewEntityManager(dbmap *gorp.DbMap) EntityManager {
 
 func NewEntityManagerWithTransaction(dbmap *gorp.Transaction) EntityManager {
 	return &entityManager{tx: dbmap}
+}
+
+func (e *entityManager) Update(entity interface{}) error {
+	var err error
+
+	if e.tx != nil {
+		_, err = e.tx.Update(entity)
+	} else {
+		_, err = e.db.Update(entity)
+	}
+
+	return err
 }
 
 func (e *entityManager) Insert(entity interface{}) error {
@@ -51,4 +67,12 @@ func (e *entityManager) Get(entity interface{}, sql string, args map[string]inte
 	}
 
 	return err
+}
+
+func (e *entityManager) SetDebug(value bool) {
+	e.debug = value
+}
+
+func (e *entityManager) IsDebug() bool {
+	return e.debug
 }

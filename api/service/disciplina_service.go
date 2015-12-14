@@ -8,6 +8,7 @@ import "github.com/helderfarias/ges/api/lib/orm"
 type DisciplinaService interface {
 	Consultar(criterio *criterio.CriterioDisciplina) ([]dominio.Disciplina, int64, error)
 	Cadastrar(disciplina *dominio.Disciplina) error
+	Alterar(disciplina *dominio.Disciplina) error
 }
 
 type disciplinaService struct {
@@ -26,4 +27,8 @@ func (d *disciplinaService) Consultar(criterio *criterio.CriterioDisciplina) ([]
 
 func (d *disciplinaService) Cadastrar(disciplina *dominio.Disciplina) error {
 	return d.dao.Salvar(disciplina)
+}
+
+func (d *disciplinaService) Alterar(disciplina *dominio.Disciplina) error {
+	return d.dao.Alterar(disciplina)
 }

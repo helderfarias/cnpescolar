@@ -7,8 +7,7 @@ import NavigatorHandler from './nav';
 import Home from './home';
 import LoginStore from '../stores/login_store';
 import Login from './autenticacao/login';
-import DisciplinaListagem from './disciplina/listar';
-import DisciplinaNovo from './disciplina/criar';
+import { DisciplinaNovo, DisciplinaAlterar, DisciplinaListar }  from './disciplina';
 
 const history = useBasename(createHistory)({
     basename: '/ges'
@@ -25,8 +24,9 @@ export default (
         <Route path="/" component={App}>
             <IndexRoute component={Home} onEnter={flowAuth}/>
             <Route path="/login" component={Login}/>
-            <Route path="/disciplinas" component={DisciplinaListagem} onEnter={flowAuth}/>
+            <Route path="/disciplinas" component={DisciplinaListar} onEnter={flowAuth}/>
             <Route path="/disciplina/novo" component={DisciplinaNovo} onEnter={flowAuth}/>
+            <Route path="/disciplina/alterar/:id" component={DisciplinaAlterar} onEnter={flowAuth}/>
         </Route>
     </Router>
 );

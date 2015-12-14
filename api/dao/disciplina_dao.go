@@ -11,6 +11,7 @@ import "github.com/helderfarias/ges/api/lib/orm/criteria"
 
 type DisciplinaDAO interface {
 	Salvar(disciplina *dominio.Disciplina) error
+	Alterar(disciplina *dominio.Disciplina) error
 	Filtrar(criterios *criterio.CriterioDisciplina) ([]dominio.Disciplina, int64, error)
 }
 
@@ -24,6 +25,10 @@ func NewDisciplinaDAO(em orm.EntityManager) DisciplinaDAO {
 
 func (d *disciplinaDAO) Salvar(disciplina *dominio.Disciplina) error {
 	return d.em.Insert(disciplina)
+}
+
+func (d *disciplinaDAO) Alterar(disciplina *dominio.Disciplina) error {
+	return d.em.Update(disciplina)
 }
 
 func (d *disciplinaDAO) Filtrar(criterios *criterio.CriterioDisciplina) ([]dominio.Disciplina, int64, error) {

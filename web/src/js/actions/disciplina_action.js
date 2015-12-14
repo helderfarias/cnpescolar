@@ -17,7 +17,14 @@ let DisciplinaAction = {
             actionType: Eventos.Disciplina.SALVAR,
             disciplina: disciplina
         });
-    }
+    },
+
+    alterar: function(disciplina) {
+        Dispatcher.dispatch({
+            actionType: Eventos.Disciplina.ALTERAR,
+            disciplina: disciplina
+        });
+    }    
 
 };
 

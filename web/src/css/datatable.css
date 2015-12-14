@@ -2,6 +2,6 @@
     background-color: #f5f5f5;
 }
 
-.table > tbody > tr > td > button.btn-space {
+.table > tbody > tr > td > .btn-space {
     margin-left: 3px;
 }

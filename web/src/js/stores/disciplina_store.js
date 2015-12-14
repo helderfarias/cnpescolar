@@ -49,11 +49,43 @@ function salvar(disciplina, cb) {
            });
 }
 
+function alterar(disciplina, cb) {
+    _erros = [];
+
+    if (disciplina.nome === '') {
+        _erros = [{ texto: 'Nome da disciplina é obrigatório' }];
+        cb();
+        return;
+    }
+
+    request.put(Config.Cadastro.api('/disciplinas/' + disciplina.id))
+           .send(disciplina)
+           .set('Accept', 'application/json')
+           .end(function(err, res){
+               if (err) {
+                   _erros.push(err);
+               }
+               cb();
+           });
+}
+
 let DisciplinaStore = assign({}, EventEmitter.prototype, {
 
     getDisciplinas() {
         return _disciplinas;
     },
+
+    getDisciplina(id) {       
+        for(const i in _disciplinas) {
+            let disciplina = _disciplinas[i];
+            
+            if (disciplina.id == id) {
+                return disciplina;
+            }
+        }
+
+        return null;
+    },    
 
     getTotalRegistro() {
         return _total;
@@ -90,6 +122,12 @@ Dispatcher.register(function(action) {
                 DisciplinaStore.emitChange();
             });
             break;
+
+        case Eventos.Disciplina.ALTERAR:
+            alterar(action.disciplina, function() {
+                DisciplinaStore.emitChange();
+            });
+            break;            
 
         default:
             return true;

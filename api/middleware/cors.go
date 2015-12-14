@@ -8,17 +8,17 @@ func CrossOrigin() gin.HandlerFunc {
 		if strings.EqualFold("OPTIONS", c.Request.Method) {
 			c.Writer.WriteHeader(200)
 			c.Writer.Header().Add("Access-Control-Allow-Origin", "*")
-			c.Writer.Header().Add("Access-Control-Allow-Headers", "content-type, authorization, accept")
-			c.Writer.Header().Add("Access-Control-Allow-Methods", "get, put, post, delete, options")
-			c.Writer.Header().Add("Access-Control-Expose-Headers", "x-total-count, x-limit-count")
+			c.Writer.Header().Add("Access-Control-Allow-Headers", "Content-Type, Authorization, Accept, X-Requested-With")
+			c.Writer.Header().Add("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE, OPTIONS")
+			c.Writer.Header().Add("Access-Control-Expose-Headers", "X-Total-Count, X-Limit-Count")
 			c.Next()
 			return
 		}
 
 		c.Writer.Header().Add("Access-Control-Allow-Origin", "*")
-		c.Writer.Header().Add("Access-Control-Allow-Headers", "content-type, authorization, accept")
-		c.Writer.Header().Add("Access-Control-Allow-Methods", "get, put, post, delete, options")
-		c.Writer.Header().Add("Access-Control-Expose-Headers", "x-total-count, x-limit-count")
+		c.Writer.Header().Add("Access-Control-Allow-Headers", "Content-Type, Authorization, Accept, X-Requested-With")
+		c.Writer.Header().Add("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE, OPTIONS")
+		c.Writer.Header().Add("Access-Control-Expose-Headers", "X-Total-Count, X-Limit-Count")
 		c.Next()
 	}
 }

@@ -13,7 +13,7 @@ function createGrowl(options, message) {
         growl.addClass("alert-dismissible");
         growl.append("<button  class=\"close\" data-dismiss=\"alert\" type=\"button\"><span aria-hidden=\"true\">&times;</span><span class=\"sr-only\">Close</span></button>");
     }
-    
+
     growl.append(message);
     
     if (options.top_offset) {
@@ -53,7 +53,7 @@ function createOptionsDefault() {
             amount: 20
         },
         align: "right",
-        width: 250,
+        width: 400,
         delay: 4000,
         allow_dismiss: true,
         stackup_spacing: 10
@@ -78,6 +78,10 @@ function calcNextPosition(options) {
     });
 
     return offsetAmount;
+}
+
+function isArray(obj) { 
+    return obj && (obj.constructor == Array);
 }
 
 let GrowlNotify = {
@@ -114,14 +118,15 @@ let GrowlNotify = {
         return growl;
     },
 
-    notifyOnErrors: function(messages) {
-        if (!messages) {            
+    notifyOnErrors: function(msg) {
+        if (isArray(msg)) {            
+            msg.map((value, index) => {
+                this.notify(value.texto, { type: 'danger' });
+            });
             return;
         }
 
-        messages.map((value, index) => {
-            this.notify(value.text, { type: 'danger' });
-        });
+        this.notify(msg, { type: 'danger' });
     }
 
 }

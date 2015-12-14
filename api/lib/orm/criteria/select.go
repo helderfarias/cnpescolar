@@ -51,7 +51,11 @@ func (s *selectBuilder) OrderBy(o OrderBy) {
 func (s *selectBuilder) GetResultList(list interface{}) error {
 	sql, params := s.build()
 
-	log.Println(sql, params)
+	if s.em.IsDebug() {
+		log.Println("[ges-criteria-resultlist]")
+		log.Println("[ges-criteria-sql]: ", sql)
+		log.Println("[ges-criteria-params]: ", params)
+	}
 
 	return s.em.Select(list, sql, params)
 }
@@ -59,7 +63,11 @@ func (s *selectBuilder) GetResultList(list interface{}) error {
 func (s *selectBuilder) GetSingleResult(entity interface{}) error {
 	sql, params := s.build()
 
-	log.Println(sql, params)
+	if s.em.IsDebug() {
+		log.Println("[ges-criteria-singleresult]")
+		log.Println("[ges-criteria-sql]: ", sql)
+		log.Println("[ges-criteria-params]: ", params)
+	}
 
 	return s.em.Get(entity, sql, params)
 }

@@ -13,14 +13,18 @@ type ContextWrapperFactory interface {
 
 type ContextWrapper interface {
 	Response() Response
+	Bind(e interface{})
 	GetParam(name string) string
 	GetParamAsInt(name string) int
+	GetParamAsInt64(name string) int64
+	GetQueryParam(name string) string
+	GetQueryParamAsInt(name string) int
+	GetQueryParamAsInt64(name string) int64
 	Paginate(pagina int, limite int, total int64) Params
 	GetServiceFactory() service.ServiceFactory
 }
 
 type contextWrapper struct {
-	parserForm     bool
 	context        *gin.Context
 	response       Response
 	serviceFactory service.ServiceFactory
@@ -45,10 +49,34 @@ func (c *contextWrapper) Response() Response {
 	return c.response
 }
 
-func (c *contextWrapper) GetParam(name string) string {
-	c.doParseForm()
+func (c *contextWrapper) Bind(e interface{}) {
+	if err := c.context.Bind(e); err != nil {
+		panic(err);
+	}
+}
 
-	return c.context.Request.Form.Get(name)
+func (c *contextWrapper) GetQueryParam(name string) string {
+	return c.context.Query(name)
+}
+
+func (c *contextWrapper) GetQueryParamAsInt64(name string) int64 {
+	return int64(c.GetQueryParamAsInt(name));
+}
+
+func (c *contextWrapper) GetQueryParamAsInt(name string) int {
+	value := c.GetQueryParam(name)
+	if value == "" {
+		return 0
+	}
+	return util.ToInteger(value)
+}
+
+func (c *contextWrapper) GetParam(name string) string {
+	return c.context.Param(name)
+}
+
+func (c *contextWrapper) GetParamAsInt64(name string) int64 {
+	return int64(c.GetParamAsInt(name));
 }
 
 func (c *contextWrapper) GetParamAsInt(name string) int {
@@ -73,13 +101,6 @@ func (c *contextWrapper) Paginate(pagina int, limite int, total int64) Params {
 	return Params{
 		"X-Total-Count": strconv.FormatInt(total, 10),
 		"X-Limit-Count": strconv.FormatInt(int64(limite), 10),
-	}
-}
-
-func (c *contextWrapper) doParseForm() {
-	if !c.parserForm {
-		c.context.Request.ParseForm()
-		c.parserForm = true
 	}
 }
 

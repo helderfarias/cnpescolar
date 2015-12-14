@@ -27,6 +27,10 @@ let Pagination = React.createClass({
         this.setState({ itemsPerPage: this.props.initialItemsPerPage});
     },
 
+    update(page, limit) {
+        this.setState({ itemsPerPage: limit, currentPage: page });
+    },
+
     onSelectPage(page) {
         if (this.props.onChangePage) {
             let config = this.calculatePageSize(page);

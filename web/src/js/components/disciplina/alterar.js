@@ -6,20 +6,32 @@ import DisciplinaAction from '../../actions/disciplina_action';
 import DisciplinaStore from '../../stores/disciplina_store';
 import Growl from '../comuns/alert';
 
-let DisciplinaNovo = React.createClass({
+let DisciplinaAlterar = React.createClass({
     mixins: [ History ],
 
     handleSubmit(e) {
         e.preventDefault();
 
-        let disciplina = {
-            nome: this.refs.nome.value
-        };
+        let disciplina = this.state.disciplina || {}
 
-        DisciplinaAction.salvar(disciplina);
+        disciplina.nome = this.refs.nome.value;
+
+        DisciplinaAction.alterar(disciplina);
     },
 
-    componentDidMount() {
+    getInitialState() {
+        return this.getStateFromStore();
+    },    
+
+    getStateFromStore(props) {
+        const { id } = props ? props.params : this.props.params
+
+        return {
+            disciplina: DisciplinaStore.getDisciplina(id)
+        }
+    },
+
+    componentDidMount() {        
         DisciplinaStore.addChangeListener(this.onChangeListener);
     },
 
@@ -33,15 +45,19 @@ let DisciplinaNovo = React.createClass({
             return;
         }
 
+        this.setState(this.getStateFromStore());
+
         Growl.notifyOnErrors(DisciplinaStore.getErros());
     },
    
     render() {
+        const disciplina = this.state.disciplina || {}
+
         return (
             <div>
                 <div className="row">
                     <div className="col-lg-12">
-                        <h3 className="page-header">Disciplina - Novo</h3>
+                        <h3 className="page-header">Disciplina - Alterar</h3>
                     </div>
                 </div>
 
@@ -59,7 +75,7 @@ let DisciplinaNovo = React.createClass({
                                            <div className="form-group">
                                                <label className="control-label col-sm-2">Nome </label>
                                                <div className="col-sm-10">
-                                                   <input type="text" className="form-control" ref="nome" id="nome" placeholder="Nome"/>
+                                                   <input type="text" className="form-control" ref="nome" id="nome" placeholder="Nome" defaultValue={disciplina.nome}/>
                                                </div>
                                            </div>
                                            <div className="form-group">
@@ -82,4 +98,4 @@ let DisciplinaNovo = React.createClass({
 
 });
 
-export default DisciplinaNovo;
+export default DisciplinaAlterar;
