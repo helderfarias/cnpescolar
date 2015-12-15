@@ -17,6 +17,7 @@ func (r *DisciplinaResource) register(router *gin.Engine) {
 	grupo.GET("/disciplinas", r.obterTodas)
 	grupo.POST("/disciplinas", r.cadastrar)
 	grupo.PUT("/disciplinas/:id", r.alterar)
+	grupo.DELETE("/disciplinas/:id", r.excluir)
 }
 
 func (r *DisciplinaResource) obterTodas(c *gin.Context) {
@@ -72,6 +73,16 @@ func (r *DisciplinaResource) alterar(c *gin.Context) {
 	service := context.GetServiceFactory().GetDisciplinaService()
 
 	service.Alterar(&disciplina)
+
+	context.Response().NoContent()
+}
+
+func (r *DisciplinaResource) excluir(c *gin.Context) {
+	context := r.contextFactory.Create(c)
+
+	service := context.GetServiceFactory().GetDisciplinaService()
+
+	service.Excluir(context.GetParamAsInt64("id"))
 
 	context.Response().NoContent()
 }

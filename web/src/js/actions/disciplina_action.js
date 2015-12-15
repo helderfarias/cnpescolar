@@ -3,7 +3,7 @@
 import Dispatcher from '../dispatcher/appdispatcher';
 import Eventos from '../constants/eventos';
 
-let DisciplinaAction = {
+export default {
 
     filtrarPor: function(filtro) {
         Dispatcher.dispatch({
@@ -24,8 +24,13 @@ let DisciplinaAction = {
             actionType: Eventos.Disciplina.ALTERAR,
             disciplina: disciplina
         });
-    }    
+    },
+
+    excluir: function(disciplina) {
+        Dispatcher.dispatch({
+            actionType: Eventos.Disciplina.EXCLUIR,
+            disciplina: disciplina
+        });
+    }        
 
 };
-
-export default DisciplinaAction;

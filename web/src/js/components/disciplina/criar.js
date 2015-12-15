@@ -6,7 +6,7 @@ import DisciplinaAction from '../../actions/disciplina_action';
 import DisciplinaStore from '../../stores/disciplina_store';
 import Growl from '../comuns/alert';
 
-let DisciplinaNovo = React.createClass({
+export default React.createClass({
     mixins: [ History ],
 
     handleSubmit(e) {
@@ -59,7 +59,7 @@ let DisciplinaNovo = React.createClass({
                                            <div className="form-group">
                                                <label className="control-label col-sm-2">Nome </label>
                                                <div className="col-sm-10">
-                                                   <input type="text" className="form-control" ref="nome" id="nome" placeholder="Nome"/>
+                                                   <input type="text" className="form-control" ref="nome" id="nome" placeholder="Nome" autoFocus/>
                                                </div>
                                            </div>
                                            <div className="form-group">
@@ -81,5 +81,3 @@ let DisciplinaNovo = React.createClass({
     }
 
 });
-
-export default DisciplinaNovo;

@@ -10,7 +10,8 @@ let Eventos = {
     Disciplina: {
         LISTAR: 'LISTAR_DISCIPLINAS',
         SALVAR: 'SALVAR_DISCIPLINAS',
-        ALTERAR: 'ALTERAR_DISCIPLINAS'
+        ALTERAR: 'ALTERAR_DISCIPLINAS',
+        EXCLUIR: 'EXCLUIR_DISCIPLINAS'
     }
 
 };

@@ -3,7 +3,7 @@
 import Dispatcher from '../dispatcher/appdispatcher';
 import Eventos from '../constants/eventos';
 
-let LoginAction = {
+export default {
 
     login: function(login, senha) {
         Dispatcher.dispatch({
@@ -19,5 +19,3 @@ let LoginAction = {
     }
 
 };
-
-export default LoginAction;

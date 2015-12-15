@@ -6,7 +6,7 @@ import { History } from 'react-router';
 import LoginAction from '../../actions/login_action';
 import LoginStore from '../../stores/login_store';
 
-let Login = React.createClass({
+export default React.createClass({
     mixins: [ History ],
 
     getInitialState() {
@@ -68,6 +68,3 @@ let Login = React.createClass({
     }
 
 });
-
-
-export default Login;

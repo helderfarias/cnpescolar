@@ -2,18 +2,19 @@
 
 import React from 'react';
 import { Link, History } from 'react-router';
-import Modal from '../comuns/modal';
+import Dialog from '../comuns/dialog';
 import Button from '../comuns/button';
 import DisciplinaAction from '../../actions/disciplina_action';
 import DisciplinaStore from '../../stores/disciplina_store';
 import TableRow from '../comuns/table';
 import Pagination from '../comuns/pagination';
 
-let DisciplinaListar = React.createClass({
+export default React.createClass({
     mixins: [ History ],
 
     getInitialState() {
         return {
+            pagina: 1,
             itensPorPagina: 10,
             total:  DisciplinaStore.getTotalRegistro(),
             disciplinas: DisciplinaStore.getDisciplinas(),
@@ -22,27 +23,12 @@ let DisciplinaListar = React.createClass({
 
     componentDidMount() {
         DisciplinaStore.addChangeListener(this.onChangeListener);
+
+        DisciplinaAction.filtrarPor();
     },
 
     componentWillUnmount() {
         DisciplinaStore.removeChangeListener(this.onChangeListener);
-    },
-
-    openFiltro() {
-        this.refs.filtro.open();
-    },
-
-    filtrar() {
-        let criterios = {
-            nome: this.refs.nome.value.trim(),
-            pagina: 1,
-            limite: 10
-        };
-
-        DisciplinaAction.filtrarPor(criterios);
-        this.refs.nome.value = null;
-        this.refs.filtro.close();
-        this.refs.page.update(criterios.pagina, criterios.limite);
     },
 
     onChangeListener() {
@@ -64,13 +50,39 @@ let DisciplinaListar = React.createClass({
         DisciplinaAction.filtrarPor(criterios);
     },
 
-    excluir(e) {
-        this.refs.teste.value="ok";
-        this.refs.exclusao.open(e);
+    abrirFiltro() {
+        this.refs.filtro.open();
+    },    
+
+    aplicarFiltro(e) {
+        if (!e.ok) {
+            return false;
+        }
+
+        let criterios = {
+            nome: this.refs.nome.value.trim(),
+            pagina: 1,
+            limite: 10
+        };
+
+        DisciplinaAction.filtrarPor(criterios);
+        this.refs.nome.value = null;
+        this.refs.page.update(criterios.pagina, criterios.limite);
+    },    
+
+    excluir(disciplina) {
+        this.refs.exclusao.open({ 
+            text: 'Deseja realmente excluir "' + disciplina.nome +'"?', 
+            target: disciplina
+        });
     },
 
     confirmarExclusao(e) {   
-        this.refs.exclusao.close();
+        if (!e.ok) {
+            return false;
+        }
+
+        DisciplinaAction.excluir(e.target);
     },
 
     render() {
@@ -99,7 +111,7 @@ let DisciplinaListar = React.createClass({
                             <div className="panel-heading clearfix">
                                 <div className="btn-group pull-right">
                                     <Link to="/disciplina/novo" className="btn btn-default btn-md"><i className="fa fa-plus-circle"></i> </Link>
-                                    <a className="btn btn-default btn-md" onClick={this.openFiltro}><i className="fa fa-filter"></i> </a>
+                                    <a className="btn btn-default btn-md" onClick={this.abrirFiltro}><i className="fa fa-filter"></i> </a>
                                 </div>
                             </div>
 
@@ -130,7 +142,10 @@ let DisciplinaListar = React.createClass({
                     </div>
                 </div>
 
-                <Modal ref="filtro" onConfirm={this.filtrar}>
+                <Dialog ref="filtro" 
+                        title="Filtro"
+                        okLabel="Aplicar"
+                        onClose={this.aplicarFiltro}>
                     <form className="form-horizontal" role="form">
                         <div className="form-group">
                             <label className="control-label col-sm-1">Nome </label>
@@ -139,20 +154,12 @@ let DisciplinaListar = React.createClass({
                             </div>
                         </div>
                     </form>
-                </Modal>
+                </Dialog>
 
-                <Modal ref="exclusao" title="Atenção" labelOK="OK" onConfirm={this.confirmarExclusao}>
-                    <form className="form-horizontal" role="form">
-                        <p ref="teste"></p>
-                        <div className="form-group">
-                            <label className="left col-sm-12">Deseja realmente excluir?</label>
-                        </div>
-                    </form>
-                </Modal>                
+                <Dialog ref="exclusao" 
+                        onClose={this.confirmarExclusao} />
             </div>
         );
     }
 
 });
-
-export default DisciplinaListar;

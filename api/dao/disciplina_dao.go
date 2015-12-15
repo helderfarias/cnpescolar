@@ -12,6 +12,7 @@ import "github.com/helderfarias/ges/api/lib/orm/criteria"
 type DisciplinaDAO interface {
 	Salvar(disciplina *dominio.Disciplina) error
 	Alterar(disciplina *dominio.Disciplina) error
+	Excluir(id int64) error
 	Filtrar(criterios *criterio.CriterioDisciplina) ([]dominio.Disciplina, int64, error)
 }
 
@@ -29,6 +30,12 @@ func (d *disciplinaDAO) Salvar(disciplina *dominio.Disciplina) error {
 
 func (d *disciplinaDAO) Alterar(disciplina *dominio.Disciplina) error {
 	return d.em.Update(disciplina)
+}
+
+func (d *disciplinaDAO) Excluir(id int64) error {
+	disciplina := dominio.Disciplina{Id: id}
+
+	return d.em.Delete(&disciplina)
 }
 
 func (d *disciplinaDAO) Filtrar(criterios *criterio.CriterioDisciplina) ([]dominio.Disciplina, int64, error) {

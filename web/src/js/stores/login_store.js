@@ -4,57 +4,23 @@ import Dispatcher from '../dispatcher/appdispatcher';
 import Eventos from '../constants/eventos';
 import Config from '../constants/api';
 import { EventEmitter } from 'events';
-import request from 'superagent';
 import assign from 'object-assign';
+import LoginService from '../services/login_service';
 
-let _token = localStorage.getItem('gestoken');
-let _erros = [];
+var service = new LoginService();
 
-function autenticar(credencias, cb) {
-    _erros = [];
-
-    if (!credencias || !credencias.login || !credencias.senha) {
-        _erros = [ { text: 'Credências inválida' }];
-        return cb();
-    }
-
-    request.post(Config.Seguranca.api('/token'))
-           .send({ username: credencias.login, password: credencias.senha })
-           .set('Accept', 'application/json')
-           .set('Content-Type', 'application/x-www-form-urlencoded')
-           .set('Authorization', montarHashClientCredencials())
-           .end(function(err, res) {
-                if (!err) {
-                    localStorage.setItem('gestoken', res.text);
-                }
-
-                cb();
-           });
-}
-
-function removerToken() {
-    localStorage.removeItem('gestoken');
-    _erros = [];
-}
-
-function montarHashClientCredencials() {
-    let credenciais = Config.ClientCredencials.id + ':' + Config.ClientCredencials.secret;
-
-    return 'Basic ' + new Buffer(credenciais).toString('base64');
-}
-
-let LoginStore = assign({}, EventEmitter.prototype, {
+let Store = assign({}, EventEmitter.prototype, {
 
     getToken() {
-        return _token;
+        return service.token;
     },
 
     getErros() {
-        return _erros;
+        return service.erros;
     },
 
     isLoggedIn() {
-        return !!localStorage.getItem('gestoken');
+        return !!service.token;
     },
 
     emitChange() {
@@ -68,19 +34,17 @@ let LoginStore = assign({}, EventEmitter.prototype, {
     removeChangeListener(cb) {
         this.removeListener('change', cb);
     }
+
 });
 
 Dispatcher.register(function(action) {
     switch (action.actionType) {
         case Eventos.Autenticacao.LOGIN:
-            autenticar(action.credencias, function() {
-                LoginStore.emitChange();
-            });
+            service.autenticar(action.credencias, () => { Store.emitChange(); });
             break;
 
         case Eventos.Autenticacao.LOGOUT:
-            removerToken();
-            LoginStore.emitChange();
+            service.revogar(() => { Store.emitChange(); });
             break;
 
         default:
@@ -88,4 +52,4 @@ Dispatcher.register(function(action) {
     }
 });
 
-export default LoginStore;
+export default Store;

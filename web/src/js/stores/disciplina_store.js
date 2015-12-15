@@ -4,95 +4,27 @@ import Dispatcher from '../dispatcher/appdispatcher';
 import Eventos from '../constants/eventos';
 import Config from '../constants/api';
 import { EventEmitter } from 'events';
-import request from 'superagent';
 import assign from 'object-assign';
+import DisciplinaService from '../services/disciplina_service';
 
-var _disciplinas = [];
-var _erros = [];
-var _total = 0;
+var service = new DisciplinaService();
 
-function consultar(criterios, cb) {
-    _erros = [];
-
-    request.get(Config.Cadastro.api('/disciplinas'))
-            .query({ nome: criterios.nome })
-            .query({ pagina: criterios.pagina, limite: criterios.limite })
-            .end(function(err, res) {
-               if (err) {
-                   _erros.push(err);
-               } else {
-                   _disciplinas = res.body;
-                   _total = parseInt(res.headers['x-total-count']);
-               }
-
-               cb();
-            });
-}
-
-function salvar(disciplina, cb) {
-    _erros = [];
-
-    if (disciplina.nome === '') {
-        _erros = [{ texto: 'Nome da disciplina é obrigatório' }];
-        cb();
-        return;
-    }
-
-    request.post(Config.Cadastro.api('/disciplinas'))
-           .send(disciplina)
-           .set('Accept', 'application/json')
-           .end(function(err, res){
-               if (err) {
-                   _erros.push(err);
-               }
-               cb();
-           });
-}
-
-function alterar(disciplina, cb) {
-    _erros = [];
-
-    if (disciplina.nome === '') {
-        _erros = [{ texto: 'Nome da disciplina é obrigatório' }];
-        cb();
-        return;
-    }
-
-    request.put(Config.Cadastro.api('/disciplinas/' + disciplina.id))
-           .send(disciplina)
-           .set('Accept', 'application/json')
-           .end(function(err, res){
-               if (err) {
-                   _erros.push(err);
-               }
-               cb();
-           });
-}
-
-let DisciplinaStore = assign({}, EventEmitter.prototype, {
+let Store = assign({}, EventEmitter.prototype, {
 
     getDisciplinas() {
-        return _disciplinas;
+        return service.disciplinas;
     },
 
-    getDisciplina(id) {       
-        for(const i in _disciplinas) {
-            let disciplina = _disciplinas[i];
-            
-            if (disciplina.id == id) {
-                return disciplina;
-            }
-        }
-
-        return null;
-    },    
+    getDisciplina(id) {
+        return service.obter(id);
+    },
 
     getTotalRegistro() {
-        return _total;
+        return service.total;
     },
 
     getErros() {
-        return _erros;
+        return service.erros;
     },
 
     emitChange() {
@@ -112,26 +44,24 @@ let DisciplinaStore = assign({}, EventEmitter.prototype, {
 Dispatcher.register(function(action) {
     switch (action.actionType) {
         case Eventos.Disciplina.LISTAR:
-            consultar(action.criterios, () => {
-                DisciplinaStore.emitChange();
-            });
+            service.consultar(action.criterios, () => { Store.emitChange(); });
             break;
 
         case Eventos.Disciplina.SALVAR:
-            salvar(action.disciplina, function() {
-                DisciplinaStore.emitChange();
-            });
+            service.salvar(action.disciplina, () => { Store.emitChange(); });
             break;
 
         case Eventos.Disciplina.ALTERAR:
-            alterar(action.disciplina, function() {
-                DisciplinaStore.emitChange();
-            });
-            break;            
+            service.alterar(action.disciplina, () => { Store.emitChange(); });
+            break;
+
+        case Eventos.Disciplina.EXCLUIR:
+            service.excluir(action.disciplina, () => { Store.emitChange(); });
+            break;
 
         default:
             return true;
     }
 });
 
-export default DisciplinaStore;
+export default Store;

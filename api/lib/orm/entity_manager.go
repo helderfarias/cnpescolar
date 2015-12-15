@@ -5,6 +5,7 @@ import "github.com/go-gorp/gorp"
 type EntityManager interface {
 	Insert(entity interface{}) error
 	Update(entity interface{}) error
+	Delete(entity interface{}) error
 	Select(entity interface{}, sql string, args map[string]interface{}) error
 	Get(entity interface{}, sql string, args map[string]interface{}) error
 	SetDebug(value bool)
@@ -32,6 +33,18 @@ func (e *entityManager) Update(entity interface{}) error {
 		_, err = e.tx.Update(entity)
 	} else {
 		_, err = e.db.Update(entity)
+	}
+
+	return err
+}
+
+func (e *entityManager) Delete(entity interface{}) error {
+	var err error
+
+	if e.tx != nil {
+		_, err = e.tx.Delete(entity)
+	} else {
+		_, err = e.db.Delete(entity)
 	}
 
 	return err

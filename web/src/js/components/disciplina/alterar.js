@@ -6,7 +6,7 @@ import DisciplinaAction from '../../actions/disciplina_action';
 import DisciplinaStore from '../../stores/disciplina_store';
 import Growl from '../comuns/alert';
 
-let DisciplinaAlterar = React.createClass({
+export default React.createClass({
     mixins: [ History ],
 
     handleSubmit(e) {
@@ -75,7 +75,7 @@ let DisciplinaAlterar = React.createClass({
                                            <div className="form-group">
                                                <label className="control-label col-sm-2">Nome </label>
                                                <div className="col-sm-10">
-                                                   <input type="text" className="form-control" ref="nome" id="nome" placeholder="Nome" defaultValue={disciplina.nome}/>
+                                                   <input type="text" className="form-control" ref="nome" id="nome" placeholder="Nome" defaultValue={disciplina.nome} autoFocus/>
                                                </div>
                                            </div>
                                            <div className="form-group">
@@ -97,5 +97,3 @@ let DisciplinaAlterar = React.createClass({
     }
 
 });
-
-export default DisciplinaAlterar;

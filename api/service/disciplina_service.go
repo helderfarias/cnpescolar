@@ -9,6 +9,7 @@ type DisciplinaService interface {
 	Consultar(criterio *criterio.CriterioDisciplina) ([]dominio.Disciplina, int64, error)
 	Cadastrar(disciplina *dominio.Disciplina) error
 	Alterar(disciplina *dominio.Disciplina) error
+	Excluir(id int64) error
 }
 
 type disciplinaService struct {
@@ -31,4 +32,8 @@ func (d *disciplinaService) Cadastrar(disciplina *dominio.Disciplina) error {
 
 func (d *disciplinaService) Alterar(disciplina *dominio.Disciplina) error {
 	return d.dao.Alterar(disciplina)
+}
+
+func (d *disciplinaService) Excluir(id int64) error {
+	return d.dao.Excluir(id)
 }
