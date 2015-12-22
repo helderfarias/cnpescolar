@@ -36,8 +36,6 @@ func (r *DisciplinaResource) obterTodas(c *gin.Context) {
 		log.Println(err)
 	}
 
-	log.Println(criterios)
-
 	context.Response().
 		Header(context.Paginate(criterios.Pagina, criterios.Limite, total)).
 		Status(http.StatusOK).
@@ -47,12 +45,9 @@ func (r *DisciplinaResource) obterTodas(c *gin.Context) {
 func (r *DisciplinaResource) cadastrar(c *gin.Context) {
 	var disciplina dominio.Disciplina
 
-	if err := c.Bind(&disciplina); err != nil {
-		log.Println(err)
-		return
-	}
+    context := r.contextFactory.Create(c)
 
-	context := r.contextFactory.Create(c)
+	context.Bind(&disciplina)
 
 	service := context.GetServiceFactory().GetDisciplinaService()
 
@@ -62,10 +57,10 @@ func (r *DisciplinaResource) cadastrar(c *gin.Context) {
 }
 
 func (r *DisciplinaResource) alterar(c *gin.Context) {
+    var disciplina dominio.Disciplina
+
 	context := r.contextFactory.Create(c)
 
-	var disciplina dominio.Disciplina
-	
 	context.Bind(&disciplina)
 
 	disciplina.Id = context.GetParamAsInt64("id")

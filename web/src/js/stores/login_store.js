@@ -15,6 +15,10 @@ let Store = assign({}, EventEmitter.prototype, {
         return service.token;
     },
 
+    getNomeUsuario() {
+        return service.usuario.name;
+    },
+
     getErros() {
         return service.erros;
     },

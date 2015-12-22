@@ -44,6 +44,7 @@ func (d *segurancaService) Autenticar(login, senha string) (*dominio.Token, erro
 	}
 
 	signMethod := jwt.New(jwt.SigningMethodES512)
+    signMethod.Claims["name"] = usuario.Nome
 	signMethod.Claims["login"] = login
 	signMethod.Claims["roles"] = constants.ROLE_PERMISSAO_ACESSO_SISTEMA
 

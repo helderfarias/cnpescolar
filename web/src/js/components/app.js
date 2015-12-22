@@ -25,6 +25,8 @@ let NavBar = React.createClass({
     },
 
     render() {
+        const usuario = LoginStore.getNomeUsuario();
+
         const conteudo = (
             <nav className="navbar navbar-default navbar-static-top" role="navigation" style={{marginBottom: 0}}>
                 <div className="navbar-header">
@@ -34,14 +36,15 @@ let NavBar = React.createClass({
                         <span className="icon-bar"></span>
                         <span className="icon-bar"></span>
                     </button>
-                    <a className="navbar-brand" href="index.html">Boostrap Admin</a>
+                    <a className="navbar-brand" href="#">Boostrap Admin</a>
                 </div>
 
                 <ul className="nav navbar-top-links navbar-right">
                     <li className="dropdown">
                         <a className="dropdown-toggle" data-toggle="dropdown" href="#">
-                            <i className="fa fa-user fa-fw"></i>  <i className="fa fa-caret-down"></i>
+                            <i className="fa fa-user fa-fw"></i> {usuario} <i className="fa fa-caret-down"> </i>
                         </a>
+
                         <ul className="dropdown-menu dropdown-user">
                             <li><a href="#" onClick={this.props.onLogout}><i className="fa fa-sign-out fa-fw"></i> Sair</a></li>
                         </ul>

@@ -17,6 +17,22 @@ export default class LoginService {
         return localStorage.getItem('gestoken');
     }
 
+    get usuario() {
+        if (!this.token) {
+            return {};
+        }
+
+        let parts = this.token.split('.', 2);
+        let decoded = atob(parts[1]);
+        let payload = JSON.parse(decoded);
+
+        return {
+            name: payload.name,
+            login: payload.login,
+            roles: payload.roles
+        };
+    }
+
     autenticar(credencias, cb) {
         this._erros = [];
 

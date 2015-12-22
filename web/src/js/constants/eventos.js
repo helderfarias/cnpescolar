@@ -12,6 +12,13 @@ let Eventos = {
         SALVAR: 'SALVAR_DISCIPLINAS',
         ALTERAR: 'ALTERAR_DISCIPLINAS',
         EXCLUIR: 'EXCLUIR_DISCIPLINAS'
+    },
+
+    Curso: {
+        LISTAR: 'LISTAR_CURSOS',
+        SALVAR: 'SALVAR_CURSOS',
+        ALTERAR: 'ALTERAR_CURSOS',
+        EXCLUIR: 'EXCLUIR_CURSOS'
     }
 
 };

@@ -15,6 +15,7 @@ func init() {
 
 	domains = append(domains, mapper{entity: Disciplina{}, tableName: "disciplinas", setKeys: true})
 	domains = append(domains, mapper{entity: Usuario{}, tableName: "usuarios", setKeys: true})
+    domains = append(domains, mapper{entity: Curso{}, tableName: "cursos", setKeys: true})
 }
 
 func RegisterDomains(register registerType) {

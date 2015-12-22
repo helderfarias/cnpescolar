@@ -4,10 +4,11 @@ import React from 'react';
 import { Link, History } from 'react-router';
 import Dialog from '../comuns/dialog';
 import Button from '../comuns/button';
-import DisciplinaAction from '../../actions/disciplina_action';
-import DisciplinaStore from '../../stores/disciplina_store';
+import CursoAction from '../../actions/curso_action';
+import CursoStore from '../../stores/curso_store';
 import TableRow from '../comuns/table';
 import Pagination from '../comuns/pagination';
+import LimitePaginacao from '../../constants/limites';
 
 export default React.createClass({
     mixins: [ History ],
@@ -16,27 +17,27 @@ export default React.createClass({
         return {
             pagina: 1,
             itensPorPagina: 10,
-            total:  DisciplinaStore.getTotalRegistro(),
-            disciplinas: DisciplinaStore.getDisciplinas(),
+            total:  CursoStore.getTotalRegistro(),
+            cursos: CursoStore.getCursos(),
         }
     },
 
     componentDidMount() {
-        DisciplinaStore.addChangeListener(this.onChangeListener);
+        CursoStore.addChangeListener(this.onChangeListener);
 
-        DisciplinaAction.filtrarPor();
+        CursoAction.filtrarPor();
     },
 
     componentWillUnmount() {
-        DisciplinaStore.removeChangeListener(this.onChangeListener);
+        CursoStore.removeChangeListener(this.onChangeListener);
     },
 
     onChangeListener() {
         this.setState({
             pagina: this.state.pagina,
-            total:  DisciplinaStore.getTotalRegistro(),
+            total:  CursoStore.getTotalRegistro(),
             itensPorPagina: this.state.itensPorPagina,
-            disciplinas: DisciplinaStore.getDisciplinas()
+            cursos: CursoStore.getCursos()
         });
     },
 
@@ -47,7 +48,7 @@ export default React.createClass({
             limite: e.limit
         };
 
-        DisciplinaAction.filtrarPor(criterios);
+        CursoAction.filtrarPor(criterios);
     },
 
     abrirFiltro() {
@@ -65,15 +66,15 @@ export default React.createClass({
             limite: 10
         };
 
-        DisciplinaAction.filtrarPor(criterios);
+        CursoAction.filtrarPor(criterios);
         this.refs.nome.value = null;
         this.refs.page.update(criterios.pagina, criterios.limite);
     },
 
-    excluir(disciplina) {
+    excluir(row) {
         this.refs.exclusao.open({
-            text: 'Deseja realmente excluir "' + disciplina.nome +'"?',
-            target: disciplina
+            text: 'Deseja realmente excluir "' + row.nome +'"?',
+            target: row
         });
     },
 
@@ -82,17 +83,17 @@ export default React.createClass({
             return false;
         }
 
-        DisciplinaAction.excluir(e.target);
+        CursoAction.excluir(e.target);
     },
 
     render() {
-        let rows = this.state.disciplinas.map((row, rowIndex) => {
+        let rows = this.state.cursos.map((row, rowIndex) => {
             return (
                 <TableRow key={rowIndex}>
                     <td>{row.id}</td>
                     <td>{row.nome}</td>
                     <td className="col-xs-2 col-md-2 col-lg-1">
-                        <Link to={`/disciplinas/alterar/${row.id}`} className="btn btn-default btn-md btn-space"><i className="fa fa-pencil"></i> </Link>
+                        <Link to={`/cursos/alterar/${row.id}`} className="btn btn-default btn-md btn-space"><i className="fa fa-pencil"></i> </Link>
                         <Button target={row} icon={'fa fa-trash'} onClick={this.excluir} />
                     </td>
                 </TableRow>
@@ -102,7 +103,7 @@ export default React.createClass({
         return (
             <div className="row">
                 <div className="col-lg-12">
-                    <h3 className="page-header">Listagem de Disciplinas</h3>
+                    <h3 className="page-header">Listagem de Cursos</h3>
                 </div>
 
                 <div className="row">
@@ -110,7 +111,7 @@ export default React.createClass({
                         <div className="panel panel-default">
                             <div className="panel-heading clearfix">
                                 <div className="btn-group pull-right">
-                                    <Link to="/disciplinas/novo" className="btn btn-default btn-md"><i className="fa fa-plus-circle"></i> </Link>
+                                    <Link to="/cursos/novo" className="btn btn-default btn-md"><i className="fa fa-plus-circle"></i> </Link>
                                     <a className="btn btn-default btn-md" onClick={this.abrirFiltro}><i className="fa fa-filter"></i> </a>
                                 </div>
                             </div>
@@ -133,7 +134,7 @@ export default React.createClass({
                             <div className="panel-footer">
                                 <Pagination ref="page"
                                             position={'right'}
-                                            pageSize={[3, 5, 10, 20, 30, 40, 50, 100]}
+                                            pageSize={LimitePaginacao.Tamanhos}
                                             totalCount={this.state.total}
                                             onChangePage={this.paginar}
                                             initialItemsPerPage={this.state.itensPorPagina} />

@@ -10,7 +10,36 @@ let Menu = React.createClass({
         this._resizeWindow();
     },
 
-    filtrarItensMenu() {
+    render() {
+        return (
+            <div className="navbar-default sidebar" role="navigation">
+                <div id="menu" className="sidebar-nav navbar-collapse">
+                    <ul className="nav" id="side-menu">
+                        <li className="sidebar-search">
+                            <div className="input-group custom-search-form">
+                                <input type="text" className="form-control" ref="search" id="search" placeholder="Procurar..." autofocus={true} />
+                                <span className="input-group-btn">
+                                    <button className="btn btn-default" type="button" onClick={this._filtrarItensMenu}>
+                                        <i className="fa fa-search"></i>
+                                    </button>
+                                </span>
+                            </div>
+                        </li>
+
+                        <li>
+                            <a href="#"><i className="fa fa-edit fa-fw"></i> Cadastros <span className="fa arrow"></span></a>
+                            <ul className="nav nav-second-level">
+                                <li><Link to="/disciplinas">Disciplina</Link></li>
+                                <li><Link to="/cursos">Curso</Link></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        );
+    },
+
+    _filtrarItensMenu() {
         let accentFold = function(text) {
             return text.replace(/([àáâãäå])|([ç])|([èéêë])|([ìíîï])|([ñ])|([òóôõöø])|([ß])|([ùúûü])|([ÿ])|([æ])/g,
                                 function(str,a,c,e,i,n,o,s,u,y,ae) {
@@ -40,34 +69,6 @@ let Menu = React.createClass({
         if (pesquisa && pesquisa.replace(' ', '').length > 1) {
             $("#menu ul li a:not(:Contains('"+ pesquisa +"'))").hide();
         }
-    },
-
-    render() {
-        return (
-            <div className="navbar-default sidebar" role="navigation">
-                <div id="menu" className="sidebar-nav navbar-collapse">
-                    <ul className="nav" id="side-menu">
-                        <li className="sidebar-search">
-                            <div className="input-group custom-search-form">
-                                <input type="text" className="form-control" ref="search" id="search" placeholder="Procurar..." autofocus={true} />
-                                <span className="input-group-btn">
-                                    <button className="btn btn-default" type="button" onClick={this.filtrarItensMenu}>
-                                        <i className="fa fa-search"></i>
-                                    </button>
-                                </span>
-                            </div>
-                        </li>
-
-                        <li>
-                            <a href="#"><i className="fa fa-edit fa-fw"></i> Cadastros <span className="fa arrow"></span></a>
-                            <ul className="nav nav-second-level">
-                                <li><Link to="/disciplinas">Disciplina</Link></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        );
     },
 
     _resizeWindow() {
