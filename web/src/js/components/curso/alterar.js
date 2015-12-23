@@ -5,6 +5,7 @@ import { Link, History } from 'react-router';
 import CursoAction from '../../actions/curso_action';
 import CursoStore from '../../stores/curso_store';
 import Growl from '../comuns/alert';
+import Select from '../comuns/select';
 
 export default React.createClass({
     mixins: [ History ],
@@ -15,7 +16,7 @@ export default React.createClass({
         let curso = this.state.curso || {}
 
         curso.nome = this.refs.nome.value;
-        curso.nivel_id = parseInt(this.refs.nivel.value);
+        curso.nivel_id = parseInt(this.refs.nivel.selected());
 
         CursoAction.alterar(curso);
     },
@@ -53,10 +54,7 @@ export default React.createClass({
 
     render() {
         const curso = this.state.curso || {}
-
-        const niveis = CursoStore.getNiveis().map((n, i) => {
-            return (<option key={i} value={n.id}>{n.nome}</option>);
-        });
+        const niveis = CursoStore.getNiveis();
 
         return (
             <div>
@@ -86,7 +84,11 @@ export default React.createClass({
                                             <div className="form-group">
                                                 <label className="control-label col-sm-2">Nível </label>
                                                 <div className="col-sm-6">
-                                                    <select className="form-control" ref="nivel" defaultValue={curso.id}>{niveis}</select>
+                                                    <Select ref="nivel"
+                                                            initialValue={curso.nivel_id}
+                                                            trackById="id"
+                                                            trackByLabel="nome"
+                                                            options={niveis}/>
                                                 </div>
                                             </div>
                                             <div className="form-group">
