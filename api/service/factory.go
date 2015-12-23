@@ -1,42 +1,33 @@
 package service
 
-import "github.com/helderfarias/ges/api/dao"
 import "github.com/helderfarias/ges/api/lib/orm"
 import "github.com/helderfarias/ges/api/util"
 
 type ServiceFactory interface {
-    GetSegurancaService() SegurancaService
+	GetSegurancaService() SegurancaService
 	GetDisciplinaService() DisciplinaService
-    GetCursoService() CursoService
+	GetCursoService() CursoService
+	GetTurmaService() TurmaService
 }
 
 type serviceFactory struct {
-    segurancaService  SegurancaService
+	segurancaService  SegurancaService
 	disciplinaService DisciplinaService
-    cursoService  CursoService
+	cursoService      CursoService
+	turmaService      TurmaService
 }
 
 func NewServiceFactory(em orm.EntityManager, certs *util.Certified) ServiceFactory {
 	factory := &serviceFactory{}
-
-    factory.segurancaService = &segurancaService{
-        dao:  dao.NewUsuarioDAO(em),
-        cert: certs,
-    }
-
-	factory.disciplinaService = &disciplinaService{
-		dao: dao.NewDisciplinaDAO(em),
-	}
-
-    factory.cursoService = &cursoService{
-        dao: dao.NewCursoDAO(em),
-    }
-
+	factory.segurancaService = NewSegurancaService(em, certs)
+	factory.disciplinaService = NewDisciplinaService(em)
+	factory.cursoService = NewCursoService(em)
+	factory.turmaService = NewTurmaService(em)
 	return factory
 }
 
 func (s *serviceFactory) GetSegurancaService() SegurancaService {
-    return s.segurancaService
+	return s.segurancaService
 }
 
 func (s *serviceFactory) GetDisciplinaService() DisciplinaService {
@@ -44,5 +35,9 @@ func (s *serviceFactory) GetDisciplinaService() DisciplinaService {
 }
 
 func (s *serviceFactory) GetCursoService() CursoService {
-    return s.cursoService
+	return s.cursoService
+}
+
+func (s *serviceFactory) GetTurmaService() TurmaService {
+	return s.turmaService
 }

@@ -14,9 +14,10 @@ func init() {
 
 	endpoints = make([]Resource, 0)
 	endpoints = append(endpoints, &PingResource{})
-    endpoints = append(endpoints, &TokenResource{contextFactory: factory})
+	endpoints = append(endpoints, &TokenResource{contextFactory: factory})
 	endpoints = append(endpoints, &DisciplinaResource{contextFactory: factory})
-    endpoints = append(endpoints, &CursoResource{contextFactory: factory})
+	endpoints = append(endpoints, &CursoResource{contextFactory: factory})
+	endpoints = append(endpoints, &TurmaResource{contextFactory: factory})
 }
 
 func RegisterEndpoints(router *gin.Engine) {

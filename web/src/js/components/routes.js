@@ -9,6 +9,7 @@ import LoginStore from '../stores/login_store';
 import Login from './autenticacao/login';
 import { DisciplinaListar, DisciplinaNovo, DisciplinaAlterar }  from './disciplina';
 import { CursoListar, CursoNovo, CursoAlterar }  from './curso';
+import { TurmaListar }  from './turma';
 
 const history = useBasename(createHistory)({
     basename: '/ges'
@@ -31,6 +32,7 @@ export default (
             <Route path="/cursos" component={CursoListar} onEnter={flowAuth}/>
             <Route path="/cursos/novo" component={CursoNovo} onEnter={flowAuth}/>
             <Route path="/cursos/alterar/:id" component={CursoAlterar} onEnter={flowAuth}/>
+            <Route path="/turmas" component={TurmaListar} onEnter={flowAuth}/>
         </Route>
     </Router>
 );

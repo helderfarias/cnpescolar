@@ -31,6 +31,7 @@ let Menu = React.createClass({
                             <ul className="nav nav-second-level">
                                 <li><Link to="/disciplinas">Disciplina</Link></li>
                                 <li><Link to="/cursos">Curso</Link></li>
+                                <li><Link to="/turmas">Turma</Link></li>
                             </ul>
                         </li>
                     </ul>

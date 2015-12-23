@@ -1,7 +1,9 @@
 package dominio
 
+import "github.com/helderfarias/ges/api/lib/orm/null"
+
 type Curso struct {
-	Id   int64  `db:"id" json:"id"`
-	Nome string `db:"nome" json:"nome"`
-    Nivel int64 `db:"nivel_id" json:"nivel_id"`
+	Id    null.Int    `db:"id" json:"id"`
+	Nome  null.String `db:"nome" json:"nome"`
+	Nivel null.Int    `db:"nivel_id" json:"nivel_id"`
 }

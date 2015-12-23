@@ -1,6 +1,8 @@
 package orm
 
 import "github.com/go-gorp/gorp"
+import "bytes"
+import "fmt"
 
 type EntityManager interface {
 	Insert(entity interface{}) error
@@ -10,11 +12,12 @@ type EntityManager interface {
 	Get(entity interface{}, sql string, args map[string]interface{}) error
 	SetDebug(value bool)
 	IsDebug() bool
+	BindIn(args ...interface{}) (string, map[string]interface{})
 }
 
 type entityManager struct {
-	db *gorp.DbMap
-	tx *gorp.Transaction
+	db    *gorp.DbMap
+	tx    *gorp.Transaction
 	debug bool
 }
 
@@ -24,6 +27,28 @@ func NewEntityManager(dbmap *gorp.DbMap) EntityManager {
 
 func NewEntityManagerWithTransaction(dbmap *gorp.Transaction) EntityManager {
 	return &entityManager{tx: dbmap}
+}
+
+func (e *entityManager) BindIn(args ...interface{}) (string, map[string]interface{}) {
+	if len(args) == 0 {
+		panic("Args is empty")
+	}
+
+	buffer := bytes.Buffer{}
+	params := make(map[string]interface{}, 0)
+
+	for i, _ := range args {
+		buffer.WriteString(fmt.Sprintf("?%d", i+1))
+		if (i + 1) < len(args) {
+			buffer.WriteString(",")
+		}
+	}
+
+	for i, v := range args {
+		params[fmt.Sprintf("?%d", i+1)] = v
+	}
+
+	return buffer.String(), params
 }
 
 func (e *entityManager) Update(entity interface{}) error {
